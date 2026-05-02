@@ -1,30 +1,17 @@
 import { type SubmitHandler, useForm } from "react-hook-form";
-import type { User, ExperienceLevel } from "../../../types/core";
+import React from "react";
+import type { User, ProfileFormInput } from "../../../types/core";
 import { useUserStore } from "../../../store/userStore";
 import "./ProfileForm.css";
 
-interface ProfileFormInput {
-  name: string;
-  age: number;
-  experienceLevel: ExperienceLevel;
-}
-
-export const ProfileForm = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<ProfileFormInput>();
-
+export const ProfileForm = (): React.JSX.Element => {
+  const { register, handleSubmit, formState: { errors } } = useForm<ProfileFormInput>();
   const { setProfile } = useUserStore();
 
-  const onSubmit: SubmitHandler<ProfileFormInput> = (data) => {
+  const onSubmit: SubmitHandler<ProfileFormInput> = (data: ProfileFormInput): void => {
     const user: User = {
       ...data,
-      assignedRoutine: {
-        name: "Mi rutina semanal",
-        entries: [],
-      },
+      assignedRoutine: { name: "Mi rutina semanal", entries: [] },
     };
     setProfile(user);
   };
@@ -64,14 +51,10 @@ export const ProfileForm = () => {
           <option value="Intermediate">Intermediate</option>
           <option value="Advanced">Advanced</option>
         </select>
-        {errors.experienceLevel && (
-          <span className="error">{errors.experienceLevel.message}</span>
-        )}
+        {errors.experienceLevel && <span className="error">{errors.experienceLevel.message}</span>}
       </div>
 
-      <button type="submit" className="submit-btn">
-        Guardar perfil
-      </button>
+      <button type="submit" className="submit-btn">Guardar perfil</button>
     </form>
   );
 };
