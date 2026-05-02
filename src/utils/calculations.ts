@@ -1,28 +1,36 @@
-import type { RoutineEntry } from "../types/core";
+import type { RoutineEntry, DayOfWeek, ExercisePercentage } from "../types/core";
 
-// Bonus: alias de tipo para calorías por minuto
-export type CaloriesPerMinute = number;
+export const calcCalories = (durationMinutes: number, caloriesPerMinute: number): number =>
+  durationMinutes * caloriesPerMinute;
 
-export const calcCalories = (
-  durationMinutes: number,
-  caloriesPerMinute: CaloriesPerMinute
-): number => durationMinutes * caloriesPerMinute;
-
-export const calcPace = (
-  durationMinutes: number,
-  distanceKm: number
-): number => Math.round((durationMinutes / distanceKm) * 100) / 100;
+export const calcPace = (durationMinutes: number, distanceKm: number): number =>
+  Math.round((durationMinutes / distanceKm) * 100) / 100;
 
 export const calcTotalCalories = (entries: RoutineEntry[]): number =>
   entries.reduce(
-    (total, entry) =>
+    (total: number, entry: RoutineEntry): number =>
       total + calcCalories(entry.exercise.durationMinutes, entry.exercise.caloriesPerMinute),
     0
   );
 
+export const getUniqueDays = (entries: RoutineEntry[]): DayOfWeek[] =>
+  Array.from(new Set(entries.map((entry: RoutineEntry): DayOfWeek => entry.day)));
+
 export const calcAvgCaloriesPerDay = (entries: RoutineEntry[]): number => {
   if (entries.length === 0) return 0;
-  return Math.round((calcTotalCalories(entries) / entries.length) * 100) / 100;
+  return Math.round((calcTotalCalories(entries) / getUniqueDays(entries).length) * 100) / 100;
+};
+
+export const getExercisePercentages = (entries: RoutineEntry[]): ExercisePercentage[] => {
+  if (entries.length === 0) return [];
+  const totalCalories = calcTotalCalories(entries);
+  return entries.map((entry: RoutineEntry): ExercisePercentage => ({
+    exerciseName: entry.exercise.name,
+    day: entry.day,
+    percentage: Math.round(
+      (calcCalories(entry.exercise.durationMinutes, entry.exercise.caloriesPerMinute) / totalCalories) * 10
+    ) / 10,
+  }));
 };
 
 export const formatDuration = (minutes: number): string => {
@@ -33,12 +41,17 @@ export const formatDuration = (minutes: number): string => {
   return `${hours}h ${mins}min`;
 };
 
-// Bonus: encuentra el día que quema más calorías
-export const findBestCalorieDay = (entries: RoutineEntry[]): RoutineEntry | null => {
+export const findBestCalorieDay = (entries: RoutineEntry[]): DayOfWeek | null => {
   if (entries.length === 0) return null;
-  return entries.reduce((best, entry) => {
-    const bestCal = calcCalories(best.exercise.durationMinutes, best.exercise.caloriesPerMinute);
-    const entryCal = calcCalories(entry.exercise.durationMinutes, entry.exercise.caloriesPerMinute);
-    return entryCal > bestCal ? entry : best;
-  });
+
+  const caloriesByDay = entries.reduce((acc: Record<string, number>, entry: RoutineEntry): Record<string, number> => {
+    acc[entry.day] = (acc[entry.day] ?? 0) + calcCalories(entry.exercise.durationMinutes, entry.exercise.caloriesPerMinute);
+    return acc;
+  }, {});
+
+  return Object.entries(caloriesByDay).reduce(
+    (bestDay: string, [day, calories]: [string, number]): string =>
+      calories > caloriesByDay[bestDay] ? day : bestDay,
+    Object.keys(caloriesByDay)[0]
+  ) as DayOfWeek;
 };
