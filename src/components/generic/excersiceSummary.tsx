@@ -1,4 +1,4 @@
-import type { RoutineEntry } from "../../types/core";
+import type { RoutineEntry, ExerciseListProps } from "../../types/core";
 import {
   calcCalories,
   calcPace,
@@ -6,10 +6,6 @@ import {
   calcAvgCaloriesPerDay,
   formatDuration,
 } from "../../utils/calculations";
-
-type ExerciseListProps = {
-  entries: RoutineEntry[];
-};
 
 const ExerciseList = ({ entries }: ExerciseListProps) => {
   if (entries.length === 0) return null;
@@ -21,11 +17,15 @@ const ExerciseList = ({ entries }: ExerciseListProps) => {
     <div className="exercise-list">
       <h2>Ejercicios registrados</h2>
       <div className="exercise-table">
-        {entries.map((entry, index) => {
+        {entries.map((entry: RoutineEntry, index: number) => {
           const calories = calcCalories(
             entry.exercise.durationMinutes,
             entry.exercise.caloriesPerMinute
           );
+
+          const percentage = totalCalories > 0 
+            ? Math.round((calories / totalCalories) * 100) 
+            : 0;
 
           return (
             <div key={index} className="exercise-row">
@@ -34,15 +34,15 @@ const ExerciseList = ({ entries }: ExerciseListProps) => {
               <span className="exercise-duration">
                 {formatDuration(entry.exercise.durationMinutes)}
               </span>
-              {entry.exercise.distanceKm != null && (
-                <span className="exercise-pace">
-                  Ritmo: {calcPace(entry.exercise.durationMinutes, entry.exercise.distanceKm)} min/km
-                </span>
-              )}
-              {entry.exercise.distanceKm == null && (
-                <span className="exercise-pace exercise-pace--empty">—</span>
-              )}
+              
+              <span className="exercise-pace">
+                {entry.exercise.distanceKm != null 
+                  ? `Ritmo: ${calcPace(entry.exercise.durationMinutes, entry.exercise.distanceKm)} min/km`
+                  : "—"}
+              </span>
+
               <span className="exercise-calories">{calories} cal</span>
+              <span className="exercise-percentage">{percentage}%</span>
             </div>
           );
         })}
