@@ -1,0 +1,180 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: #f0f4f8;
+  color: #1a202c;
+  min-height: 100vh;
+}
+
+.app-header {
+  color: black;
+  text-align: center;
+  margin:0 auto;
+  padding: 24px 16px;
+}
+.app-header h1 {
+  font-size: 2rem;
+}
+
+.app-main {
+  padding: 32px 16px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.dashboard {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 768px) {
+  .dashboard {
+    grid-template-columns: 1fr;
+  }
+}
+
+.profile-card {
+  background: white;
+  border-radius: 16px;
+  padding: 20px 24px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
+  margin-bottom: 20px;
+}
+.profile-card h2 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.profile-divider {
+  border: none;
+  border-top: 2px solid #e2e8f0;
+  margin-bottom: 12px;
+}
+.profile-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  border-bottom: 1px solid #f7fafc;
+}
+.profile-label {
+  color: #718096;
+  font-size: 0.85rem;
+}
+.profile-value {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+.profile-badge {
+  background: #ebf4ff;
+  color: #4a90e2;
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.exercise-list {
+  background: white;
+  border-radius: 16px;
+  padding: 20px 24px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
+  margin-bottom: 20px;
+}
+.exercise-list h2 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+.exercise-table {
+  border-top: 2px solid #e2e8f0;
+}
+.exercise-row {
+  display: grid;
+  grid-template-columns: 1fr 80px 70px 130px 80px;
+  gap: 8px;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #f0f4f8;
+  font-size: 0.88rem;
+}
+.exercise-name {
+  font-weight: 600;
+}
+.exercise-day {
+  color: #718096;
+  font-size: 0.8rem;
+}
+.exercise-duration {
+  color: #4a90e2;
+  font-weight: 500;
+}
+.exercise-pace {
+  color: #48bb78;
+  font-size: 0.82rem;
+}
+.exercise-pace--empty {
+  color: #cbd5e0;
+}
+.exercise-calories {
+  text-align: right;
+  font-weight: 700;
+  color: #e53e3e;
+}
+.exercise-totals {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 12px;
+  font-size: 0.9rem;
+  color: #4a5568;
+}
+
+.summary-box {
+  background: white;
+  border-radius: 16px;
+  padding: 20px 24px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
+}
+.summary-box h2 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+.summary-row {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 0;
+  border-bottom: 1px solid #f0f4f8;
+}
+.summary-label {
+  color: #718096;
+  font-size: 0.8rem;
+  margin-bottom: 2px;
+}
+.summary-value {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.empty-state {
+  background: white;
+  border-radius: 16px;
+  padding: 48px 24px;
+  text-align: center;
+  color: #718096;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
+}
+
+.app-wrapper {
+  min-height: 100vh;
+}
