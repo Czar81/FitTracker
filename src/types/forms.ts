@@ -1,10 +1,11 @@
-import type { DayOfWeek, ExperienceLevel, ExerciseCategory } from "./enums";
-import type { RoutineEntry } from "./models";
+import type { DayOfWeek, ExperienceLevel, ExerciseCategory, MembershipLevel } from "./enums";
+import type { RoutineEntry, CategoryGroup, CatalogSummary } from "./models";
 
 export interface ProfileFormInput {
   name: string;
   age: number;
   experienceLevel: ExperienceLevel;
+  membershipLevel: MembershipLevel;
 }
 
 export type ExerciseFormProps = {
@@ -13,6 +14,19 @@ export type ExerciseFormProps = {
 
 export type ExerciseListProps = {
   entries: RoutineEntry[];
+};
+
+export type ExerciseCatalogProps = {
+  entries: RoutineEntry[];
+};
+
+export type CategoryBlockProps = {
+  group: CategoryGroup;
+  label: string;
+};
+
+export type CatalogSummaryBarProps = {
+  summary: CatalogSummary;
 };
 
 export type SummaryProps = {
@@ -47,6 +61,24 @@ interface FlexibilityFormFields {
   positions: number;
 }
 
-export type ExerciseFormInput =
-  BaseExerciseFormInput &
+export type ExerciseFormInput = BaseExerciseFormInput &
   (CardioFormFields | StrengthFormFields | FlexibilityFormFields);
+
+export type FlatExerciseFormInput = {
+  day: DayOfWeek;
+  exerciseName: string;
+  durationMinutes: number;
+  caloriesPerMinute: number;
+  category: ExerciseCategory;
+  // Cardio
+  distanceKm?: number;
+  rhythm?: number;
+  heartRateZone?: string;
+  // Strength
+  sets?: number;
+  weight?: number;
+  repetitions?: number;
+  // Flexibility
+  poses?: number;
+  positions?: number;
+};

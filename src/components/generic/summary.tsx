@@ -1,4 +1,5 @@
-import type { RoutineEntry, SummaryProps } from "../../types/core";
+import type { RoutineEntry } from "../../types/models";
+import type { SummaryProps } from "../../types/forms";
 import { calcCalories, calcTotalCalories, findBestCalorieDay } from "../../utils/calculations";
 
 const Summary = ({ entries }: SummaryProps) => {
@@ -38,7 +39,7 @@ const Summary = ({ entries }: SummaryProps) => {
         <div className="summary-row">
           <span className="summary-label">Mejor día:</span>
           <span className="summary-value">
-            {bestDay} ({bestDayCalories} cal)
+            {bestDay} ({bestDayCalories.toFixed(0)} cal)
           </span>
         </div>
       )}

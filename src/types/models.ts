@@ -1,6 +1,7 @@
-import type { DayOfWeek, ExperienceLevel, MembershipLevel, ExerciseCategory } from "./enums";
+import type { DayOfWeek, ExperienceLevel, MembershipLevel, ExerciseCategory, ExerciseId, UserId, RoutineId } from "./enums";
 
 interface ExerciseBase {
+  id: ExerciseId;
   name: string;
   durationMinutes: number;
   caloriesPerMinute: number;
@@ -34,11 +35,13 @@ export interface RoutineEntry {
 }
 
 export interface WeeklyRoutine {
+  id: RoutineId;
   name: string;
   entries: RoutineEntry[];
 }
 
 export interface User {
+  id: UserId;
   name: string;
   age: number;
   experienceLevel: ExperienceLevel;

@@ -11,8 +11,13 @@ export const ProfileForm = (): React.JSX.Element => {
 
   const onSubmit: SubmitHandler<ProfileFormInput> = (data: ProfileFormInput): void => {
     const user: UserProfile = {
-      ...data,
-      assignedRoutine: { name: "Mi rutina semanal", entries: [] },
+      id: crypto.randomUUID(),
+      name: data.name,
+      age: data.age,
+      experienceLevel: data.experienceLevel,
+      assignedRoutine: { id: crypto.randomUUID(), name: "Mi rutina semanal", entries: [] },
+      membershipLevel: data.membershipLevel,
+      memberSince: new Date().toISOString().split("T")[0],
     };
     setProfile(user);
   };
@@ -34,6 +39,7 @@ export const ProfileForm = (): React.JSX.Element => {
         <label>Edad</label>
         <input
           type="number"
+          placeholder="Tu edad"
           {...register("age", {
             required: "Este campo es requerido",
             valueAsNumber: true,
@@ -53,6 +59,17 @@ export const ProfileForm = (): React.JSX.Element => {
           <option value="Advanced">Advanced</option>
         </select>
         {errors.experienceLevel && <span className="error">{errors.experienceLevel.message}</span>}
+      </div>
+
+      <div className="form-group">
+        <label>Plan de membresía</label>
+        <select {...register("membershipLevel", { required: "Este campo es requerido" })}>
+          <option value="">Seleccionar...</option>
+          <option value="Free">Free</option>
+          <option value="Premium">Premium</option>
+          <option value="Elite">Elite</option>
+        </select>
+        {errors.membershipLevel && <span className="error">{errors.membershipLevel.message}</span>}
       </div>
 
       <button type="submit" className="submit-btn">Guardar perfil</button>

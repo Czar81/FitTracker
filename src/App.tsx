@@ -1,6 +1,6 @@
 import { ProfileForm } from './components/forms/Profile/ProfileForm';
 import { ExerciseForm } from './components/forms/Excersise/ExerciseForm';
-import ExerciseList from './components/generic/excersiceSummary';
+import { ExerciseCatalog } from './components/catalog/ExerciseCatalog';
 import Summary from './components/generic/summary';
 import { useUserStore } from './store/userStore';
 import { useExerciseStore } from './store/excersiceStore';
@@ -38,6 +38,14 @@ function App() {
                     <span className="profile-label">Nivel</span>
                     <span className="profile-badge">{user.experienceLevel}</span>
                   </div>
+                  <div className="profile-row">
+                    <span className="profile-label">Membresía</span>
+                    <span className="profile-badge">{user.membershipLevel}</span>
+                  </div>
+                  <div className="profile-row">
+                    <span className="profile-label">Desde</span>
+                    <span className="profile-value">{user.memberSince}</span>
+                  </div>
                 </div>
               )}
               <ExerciseForm />
@@ -46,7 +54,7 @@ function App() {
             <div className="dashboard-right">
               {entries.length > 0 ? (
                 <>
-                  <ExerciseList entries={entries} />
+                  <ExerciseCatalog entries={entries} />
                   <Summary entries={entries} />
                 </>
               ) : (

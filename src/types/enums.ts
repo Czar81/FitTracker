@@ -12,3 +12,7 @@ export type DayOfWeek =
 export type MembershipLevel = "Free" | "Premium" | "Elite";
 
 export type ExerciseCategory = "Cardio" | "Strength" | "Flexibility";
+
+export type ExerciseId = string;
+export type UserId = string;
+export type RoutineId = string;

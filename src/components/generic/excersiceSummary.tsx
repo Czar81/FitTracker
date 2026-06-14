@@ -1,4 +1,5 @@
-import type { RoutineEntry, ExerciseListProps } from "../../types/core";
+import type { RoutineEntry } from "../../types/models";
+import type { ExerciseListProps } from "../../types/forms";
 import {
   calcCalories,
   calcPace,
@@ -36,7 +37,7 @@ const ExerciseList = ({ entries }: ExerciseListProps) => {
               </span>
               
               <span className="exercise-pace">
-                {entry.exercise.distanceKm != null 
+                {entry.exercise.type === "Cardio"
                   ? `Ritmo: ${calcPace(entry.exercise.durationMinutes, entry.exercise.distanceKm)} min/km`
                   : "—"}
               </span>
