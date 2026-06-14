@@ -1,4 +1,4 @@
-import type { RoutineEntry, User } from "./models";
+import type { RoutineEntry, UserProfile } from "./models";
 
 export interface ExerciseState {
   entries: RoutineEntry[];
@@ -6,8 +6,8 @@ export interface ExerciseState {
 }
 
 export interface UserState {
-  user: User | null;
+  user: UserProfile | null;
   isProfileSet: boolean;
-  setProfile: (data: User) => void;
+  setProfile: (data: UserProfile) => void;
   updateUserRoutine: (entries: RoutineEntry[]) => void;
 }

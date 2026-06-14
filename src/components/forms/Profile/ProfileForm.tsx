@@ -1,6 +1,7 @@
 import { type SubmitHandler, useForm } from "react-hook-form";
 import React from "react";
-import type { User, ProfileFormInput } from "../../../types/core";
+import type { UserProfile } from "../../../types/models";
+import type { ProfileFormInput } from "../../../types/forms";
 import { useUserStore } from "../../../store/userStore";
 import "./ProfileForm.css";
 
@@ -9,7 +10,7 @@ export const ProfileForm = (): React.JSX.Element => {
   const { setProfile } = useUserStore();
 
   const onSubmit: SubmitHandler<ProfileFormInput> = (data: ProfileFormInput): void => {
-    const user: User = {
+    const user: UserProfile = {
       ...data,
       assignedRoutine: { name: "Mi rutina semanal", entries: [] },
     };

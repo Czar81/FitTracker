@@ -1,4 +1,5 @@
-import type { RoutineEntry, DayOfWeek, ExercisePercentage } from "../types/core";
+import type { DayOfWeek } from "../types/enums";
+import type { RoutineEntry, ExercisePercentage } from "../types/models";
 
 export const calcCalories = (durationMinutes: number, caloriesPerMinute: number): number =>
   durationMinutes * caloriesPerMinute;

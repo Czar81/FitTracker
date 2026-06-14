@@ -1,5 +1,7 @@
 import { type SubmitHandler, useForm } from "react-hook-form";
-import type { Exercise, DayOfWeek, ExerciseFormInput, ExerciseFormProps } from "../../../types/core";
+import type { Exercise } from "../../../types/models";
+import type { DayOfWeek } from "../../../types/enums";
+import type { ExerciseFormInput, ExerciseFormProps } from "../../../types/forms";
 import { useExerciseStore } from "../../../store/excersiceStore";
 import React from "react";
 import "../Profile/ProfileForm.css";

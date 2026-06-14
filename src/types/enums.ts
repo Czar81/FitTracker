@@ -8,3 +8,7 @@ export type DayOfWeek =
   | "Friday"
   | "Saturday"
   | "Sunday";
+
+export type MembershipLevel = "Free" | "Premium" | "Elite";
+
+export type ExerciseCategory = "Cardio" | "Strength" | "Flexibility";
