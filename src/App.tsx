@@ -46,6 +46,12 @@ function App() {
                     <span className="profile-label">Desde</span>
                     <span className="profile-value">{user.memberSince}</span>
                   </div>
+                  <div className="profile-row">
+                    <span className="profile-label">Estado</span>
+                    <span className={user.isActive ? "profile-badge" : "profile-badge profile-badge--inactive"}>
+                      {user.isActive ? "Activo" : "Inactivo"}
+                    </span>
+                  </div>
                 </div>
               )}
               <ExerciseForm />
