@@ -2,6 +2,7 @@ import { type SubmitHandler, useForm } from "react-hook-form";
 import type { Exercise } from "../../../types/models";
 import type { DayOfWeek, ExerciseCategory } from "../../../types/enums";
 import type { ExerciseFormProps, FlatExerciseFormInput } from "../../../types/forms";
+import { calcPace } from "../../../utils/calculations";
 import { useExerciseStore } from "../../../store/excersiceStore";
 import React from "react";
 import { useState } from "react";
@@ -28,7 +29,7 @@ export const ExerciseForm = ({ onExerciseAdded }: ExerciseFormProps): React.JSX.
 
     switch (data.category) {
       case "Cardio": {
-        if (data.distanceKm == null || data.rhythm == null || data.heartRateZone == null) {
+        if (data.distanceKm == null || data.heartRateZone == null) {
           throw new Error("Faltan campos requeridos para Cardio");
         }
         exercise = {
@@ -38,7 +39,7 @@ export const ExerciseForm = ({ onExerciseAdded }: ExerciseFormProps): React.JSX.
           durationMinutes: data.durationMinutes,
           caloriesPerMinute: data.caloriesPerMinute,
           distanceKm: data.distanceKm,
-          rhythm: data.rhythm,
+          rhythm: calcPace(data.durationMinutes, data.distanceKm),
           heartRateZone: data.heartRateZone,
         };
         break;
@@ -60,7 +61,7 @@ export const ExerciseForm = ({ onExerciseAdded }: ExerciseFormProps): React.JSX.
         break;
       }
       case "Flexibility": {
-        if (data.poses == null || data.positions == null) {
+        if (data.poses == null) {
           throw new Error("Faltan campos requeridos para Flexibility");
         }
         exercise = {
@@ -70,7 +71,6 @@ export const ExerciseForm = ({ onExerciseAdded }: ExerciseFormProps): React.JSX.
           durationMinutes: data.durationMinutes,
           caloriesPerMinute: data.caloriesPerMinute,
           poses: data.poses,
-          positions: data.positions,
         };
         break;
       }
@@ -173,21 +173,6 @@ export const ExerciseForm = ({ onExerciseAdded }: ExerciseFormProps): React.JSX.
           </div>
 
           <div className="form-group">
-            <label>Ritmo (min/km)</label>
-            <input
-              type="number"
-              step="0.1"
-              {...register("rhythm", {
-                valueAsNumber: true,
-                validate: (val) =>
-                  category !== "Cardio" || (val != null && val > 0) || "Requerido para Cardio",
-              })}
-              placeholder="ej. 5.0"
-            />
-            {errors.rhythm && <span className="error">{errors.rhythm.message}</span>}
-          </div>
-
-          <div className="form-group">
             <label>Zona de frecuencia cardíaca</label>
             <input
               {...register("heartRateZone", {
@@ -264,19 +249,6 @@ export const ExerciseForm = ({ onExerciseAdded }: ExerciseFormProps): React.JSX.
             {errors.poses && <span className="error">{errors.poses.message}</span>}
           </div>
 
-          <div className="form-group">
-            <label>Posiciones</label>
-            <input
-              type="number"
-              {...register("positions", {
-                valueAsNumber: true,
-                validate: (val) =>
-                  category !== "Flexibility" || (val != null && val > 0) || "Requerido para Flexibility",
-              })}
-              placeholder="ej. 3"
-            />
-            {errors.positions && <span className="error">{errors.positions.message}</span>}
-          </div>
         </>
       )}
 

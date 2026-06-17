@@ -18,6 +18,7 @@ export const ProfileForm = (): React.JSX.Element => {
       assignedRoutine: { id: crypto.randomUUID(), name: "Mi rutina semanal", entries: [] },
       membershipLevel: data.membershipLevel,
       memberSince: new Date().toISOString().split("T")[0],
+      isActive: true,
     };
     setProfile(user);
   };
