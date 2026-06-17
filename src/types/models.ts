@@ -24,7 +24,6 @@ export interface StrengthExercise extends ExerciseBase {
 export interface FlexibilityExercise extends ExerciseBase {
     type: "Flexibility";
     poses: number;
-    positions: number;
 }
 
 export type Exercise = CardioExercise | StrengthExercise | FlexibilityExercise;
@@ -51,6 +50,7 @@ export interface User {
 export interface UserMembership {
   membershipLevel: MembershipLevel;
   memberSince: string;
+  isActive: boolean;
 }
 
 export type UserProfile = User & UserMembership;

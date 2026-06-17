@@ -44,7 +44,6 @@ interface BaseExerciseFormInput {
 interface CardioFormFields {
   category: "Cardio";
   distanceKm: number;
-  rhythm: number;
   heartRateZone: string;
 }
 
@@ -58,7 +57,6 @@ interface StrengthFormFields {
 interface FlexibilityFormFields {
   category: "Flexibility";
   poses: number;
-  positions: number;
 }
 
 export type ExerciseFormInput = BaseExerciseFormInput &
@@ -72,7 +70,6 @@ export type FlatExerciseFormInput = {
   category: ExerciseCategory;
   // Cardio
   distanceKm?: number;
-  rhythm?: number;
   heartRateZone?: string;
   // Strength
   sets?: number;
@@ -80,5 +77,4 @@ export type FlatExerciseFormInput = {
   repetitions?: number;
   // Flexibility
   poses?: number;
-  positions?: number;
 };
