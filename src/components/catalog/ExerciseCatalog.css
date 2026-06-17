@@ -74,24 +74,12 @@
   border-top: 1px solid #f0f4f8;
 }
 .category-exercise-row {
-  display: grid;
-  grid-template-columns: 1fr 90px 1.4fr;
-  gap: 8px;
-  align-items: center;
   padding: 8px 0;
   border-bottom: 1px solid #f0f4f8;
   font-size: 0.85rem;
 }
-.category-exercise-name {
-  font-weight: 600;
-}
-.category-exercise-day {
-  color: #718096;
-  font-size: 0.78rem;
-}
-.category-exercise-desc {
+.category-exercise-line {
   color: #4a5568;
-  font-size: 0.8rem;
 }
 .category-footer {
   display: flex;
