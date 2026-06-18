@@ -1,5 +1,6 @@
 import { create } from "zustand";
-import type { RoutineEntry, ExerciseState } from "../types/core";
+import type { RoutineEntry } from "../types/models";
+import type { ExerciseState } from "../types/state";
 import { useUserStore } from "./userStore";
 
 export const useExerciseStore = create<ExerciseState>((set) => ({

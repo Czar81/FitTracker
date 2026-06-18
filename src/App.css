@@ -83,6 +83,10 @@ body {
   font-size: 0.8rem;
   font-weight: 600;
 }
+.profile-badge--inactive {
+  background: #fff5f5;
+  color: #e53e3e;
+}
 
 .exercise-list {
   background: white;

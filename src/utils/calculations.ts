@@ -1,4 +1,5 @@
-import type { RoutineEntry, DayOfWeek, ExercisePercentage } from "../types/core";
+import type { DayOfWeek } from "../types/enums";
+import type { RoutineEntry, ExercisePercentage, CatalogSummary, CategoryGroup, Exercise } from "../types/models";
 
 export const calcCalories = (durationMinutes: number, caloriesPerMinute: number): number =>
   durationMinutes * caloriesPerMinute;
@@ -55,3 +56,81 @@ export const findBestCalorieDay = (entries: RoutineEntry[]): DayOfWeek | null =>
     Object.keys(caloriesByDay)[0]
   ) as DayOfWeek;
 };
+
+const isBonus = (exercise: Exercise): boolean => {
+  switch (exercise.type) {
+    case "Cardio":
+      return exercise.distanceKm >= 10;
+    case "Strength":
+      return exercise.sets * exercise.repetitions >= 50;
+    case "Flexibility":
+      return exercise.durationMinutes >= 30;
+    default: {
+      const _exhaustive: never = exercise;
+      return _exhaustive;
+    }
+  }
+};
+
+export const groupByCategory=(entries: RoutineEntry[]): CatalogSummary =>{
+  const cardio: CategoryGroup = {
+    category: "Cardio",
+    entries: [],
+    totalMinutes: 0,
+    totalCalories: 0,
+    bonusCount: 0,
+  };
+
+  const strength: CategoryGroup = {
+    category: "Strength",
+    entries: [],
+    totalMinutes: 0,
+    totalCalories: 0,
+    bonusCount: 0,
+  };
+
+  const flexibility: CategoryGroup = {
+    category: "Flexibility",
+    entries: [],
+    totalMinutes: 0,
+    totalCalories: 0,
+    bonusCount: 0,
+  };
+
+  for (const entry of entries) {
+  const { exercise } = entry;
+  const calories = calcCalories(exercise.durationMinutes, exercise.caloriesPerMinute);
+
+  switch (exercise.type) {
+    case "Cardio": {
+      cardio.entries.push(entry);
+      cardio.totalMinutes += exercise.durationMinutes;
+      cardio.totalCalories += calories;
+      if (isBonus(exercise)) cardio.bonusCount += 1;
+      break;
+    }
+
+    case "Strength": {
+      strength.entries.push(entry);
+      strength.totalMinutes += exercise.durationMinutes;
+      strength.totalCalories += calories;
+      if (isBonus(exercise)) strength.bonusCount += 1;
+      break;
+    }
+
+    case "Flexibility": {
+      flexibility.entries.push(entry);
+      flexibility.totalMinutes += exercise.durationMinutes;
+      flexibility.totalCalories += calories;
+      if (isBonus(exercise)) flexibility.bonusCount += 1;
+      break;
+    }
+
+    default: {
+      const _exhaustive: never = exercise;
+      return _exhaustive;
+    }
+  }
+}
+  return { cardio, strength, flexibility };
+}

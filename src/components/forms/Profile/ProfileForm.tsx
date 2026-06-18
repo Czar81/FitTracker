@@ -1,6 +1,7 @@
 import { type SubmitHandler, useForm } from "react-hook-form";
 import React from "react";
-import type { User, ProfileFormInput } from "../../../types/core";
+import type { UserProfile } from "../../../types/models";
+import type { ProfileFormInput } from "../../../types/forms";
 import { useUserStore } from "../../../store/userStore";
 import "./ProfileForm.css";
 
@@ -9,9 +10,15 @@ export const ProfileForm = (): React.JSX.Element => {
   const { setProfile } = useUserStore();
 
   const onSubmit: SubmitHandler<ProfileFormInput> = (data: ProfileFormInput): void => {
-    const user: User = {
-      ...data,
-      assignedRoutine: { name: "Mi rutina semanal", entries: [] },
+    const user: UserProfile = {
+      id: crypto.randomUUID(),
+      name: data.name,
+      age: data.age,
+      experienceLevel: data.experienceLevel,
+      assignedRoutine: { id: crypto.randomUUID(), name: "Mi rutina semanal", entries: [] },
+      membershipLevel: data.membershipLevel,
+      memberSince: new Date().toISOString().split("T")[0],
+      isActive: true,
     };
     setProfile(user);
   };
@@ -33,6 +40,7 @@ export const ProfileForm = (): React.JSX.Element => {
         <label>Edad</label>
         <input
           type="number"
+          placeholder="Tu edad"
           {...register("age", {
             required: "Este campo es requerido",
             valueAsNumber: true,
@@ -52,6 +60,17 @@ export const ProfileForm = (): React.JSX.Element => {
           <option value="Advanced">Advanced</option>
         </select>
         {errors.experienceLevel && <span className="error">{errors.experienceLevel.message}</span>}
+      </div>
+
+      <div className="form-group">
+        <label>Plan de membresía</label>
+        <select {...register("membershipLevel", { required: "Este campo es requerido" })}>
+          <option value="">Seleccionar...</option>
+          <option value="Free">Free</option>
+          <option value="Premium">Premium</option>
+          <option value="Elite">Elite</option>
+        </select>
+        {errors.membershipLevel && <span className="error">{errors.membershipLevel.message}</span>}
       </div>
 
       <button type="submit" className="submit-btn">Guardar perfil</button>
