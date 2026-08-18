@@ -2,8 +2,8 @@ import { type SubmitHandler, useForm } from "react-hook-form";
 import type { Exercise } from "../../../types/models";
 import type { DayOfWeek, ExerciseCategory } from "../../../types/enums";
 import type { ExerciseFormProps, FlatExerciseFormInput } from "../../../types/forms";
-import { calcPace } from "../../../utils/calculations";
-import { useExerciseStore } from "../../../store/excersiceStore";
+import { calcPace, calcCalories } from "../../../utils/calculations";
+import { useUserStore } from "../../../store/userStore";
 import React from "react";
 import { useState } from "react";
 import "../Profile/ProfileForm.css";
@@ -17,7 +17,7 @@ const CATEGORIES: ExerciseCategory[] = ["Cardio", "Strength", "Flexibility"];
 export const ExerciseForm = ({ onExerciseAdded }: ExerciseFormProps): React.JSX.Element => {
   const [category, setCategory] = useState<ExerciseCategory | "">("");
   const { register, handleSubmit, formState: { errors }, reset } = useForm<FlatExerciseFormInput>();
-  const { addExercise } = useExerciseStore();
+  const { addExercise } = useUserStore();
 
   const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>): void => {
     const next = e.target.value as ExerciseCategory | "";
@@ -38,9 +38,11 @@ export const ExerciseForm = ({ onExerciseAdded }: ExerciseFormProps): React.JSX.
           name: data.exerciseName,
           durationMinutes: data.durationMinutes,
           caloriesPerMinute: data.caloriesPerMinute,
+          completed: data.completed ?? false,
           distanceKm: data.distanceKm,
           rhythm: calcPace(data.durationMinutes, data.distanceKm),
           heartRateZone: data.heartRateZone,
+          caloriesBurned: calcCalories(data.durationMinutes, data.caloriesPerMinute),
         };
         break;
       }
@@ -54,6 +56,7 @@ export const ExerciseForm = ({ onExerciseAdded }: ExerciseFormProps): React.JSX.
           name: data.exerciseName,
           durationMinutes: data.durationMinutes,
           caloriesPerMinute: data.caloriesPerMinute,
+          completed: data.completed ?? false,
           sets: data.sets,
           weight: data.weight,
           repetitions: data.repetitions,
@@ -70,7 +73,9 @@ export const ExerciseForm = ({ onExerciseAdded }: ExerciseFormProps): React.JSX.
           name: data.exerciseName,
           durationMinutes: data.durationMinutes,
           caloriesPerMinute: data.caloriesPerMinute,
+          completed: data.completed ?? false,
           poses: data.poses,
+          comments: data.comments,
         };
         break;
       }
@@ -80,7 +85,7 @@ export const ExerciseForm = ({ onExerciseAdded }: ExerciseFormProps): React.JSX.
       }
     }
 
-    addExercise({ day: data.day, exercise });
+    addExercise(data.day, exercise);
     reset();
     setCategory("");
     onExerciseAdded?.();
@@ -249,8 +254,19 @@ export const ExerciseForm = ({ onExerciseAdded }: ExerciseFormProps): React.JSX.
             {errors.poses && <span className="error">{errors.poses.message}</span>}
           </div>
 
+          <div className="form-group">
+            <label>Comentario (opcional)</label>
+            <input {...register("comments")} placeholder="ej. Me costó mantener el equilibrio" />
+          </div>
         </>
       )}
+
+      <div className="form-group form-group--checkbox">
+        <label>
+          <input type="checkbox" {...register("completed")} />
+          {" "}Completado
+        </label>
+      </div>
 
       <button type="submit" className="submit-btn">Agregar ejercicio</button>
     </form>
