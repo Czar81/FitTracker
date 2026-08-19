@@ -16,3 +16,6 @@ export type ExerciseCategory = "Cardio" | "Strength" | "Flexibility";
 export type ExerciseId = string;
 export type UserId = string;
 export type RoutineId = string;
+export type InstructorId = string;
+
+export type RecommendationLevel = "low" | "ok" | "high";

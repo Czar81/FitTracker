@@ -1,0 +1,120 @@
+.routine-sessions,
+.weekly-load-card,
+.instructor-view,
+.routine-extras {
+  background: white;
+  border-radius: 16px;
+  padding: 20px 24px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
+  margin-bottom: 20px;
+}
+
+.routine-sessions h2,
+.weekly-load-card h2,
+.instructor-view h2 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.routine-start-date {
+  color: #718096;
+  font-size: 0.8rem;
+  margin-bottom: 16px;
+}
+
+.session-block {
+  padding: 10px 0;
+  border-bottom: 1px solid #f0f4f8;
+}
+.session-block h3 {
+  font-size: 0.85rem;
+  color: #4a90e2;
+  margin-bottom: 6px;
+}
+.session-rest {
+  color: #a0aec0;
+  font-size: 0.85rem;
+  font-style: italic;
+}
+.session-exercise-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  padding: 4px 0;
+  cursor: pointer;
+}
+.session-comment-input {
+  width: 100%;
+  margin-top: 8px;
+  padding: 6px 10px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.82rem;
+}
+
+.weekly-load-totals {
+  display: flex;
+  gap: 20px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin: 10px 0;
+}
+.weekly-load-breakdown {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-size: 0.85rem;
+  color: #4a5568;
+  margin-bottom: 12px;
+}
+.weekly-load-recommendation {
+  font-size: 0.85rem;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #f0f4f8;
+}
+.weekly-load-recommendation--low,
+.weekly-load-recommendation--high {
+  background: #fffbeb;
+  color: #b7791f;
+}
+.weekly-load-recommendation--ok {
+  background: #f0fff4;
+  color: #2f855a;
+}
+
+.instructor-user-row {
+  padding: 10px 0;
+  border-bottom: 1px solid #f0f4f8;
+}
+.instructor-user-name {
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+.instructor-user-routine {
+  color: #718096;
+  font-size: 0.82rem;
+}
+.instructor-user-summary {
+  font-size: 0.82rem;
+  color: #4a5568;
+}
+
+.routine-extras-best-day {
+  font-size: 0.85rem;
+  margin-bottom: 10px;
+}
+.routine-extras-pending h3 {
+  font-size: 0.85rem;
+  margin-bottom: 6px;
+}
+.routine-extras-pending ul {
+  list-style: none;
+  font-size: 0.82rem;
+  color: #4a5568;
+}
+.routine-extras-pending li {
+  padding: 3px 0;
+}

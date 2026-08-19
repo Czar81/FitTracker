@@ -14,8 +14,14 @@ export const ProfileForm = (): React.JSX.Element => {
       id: crypto.randomUUID(),
       name: data.name,
       age: data.age,
+      email: data.email,
       experienceLevel: data.experienceLevel,
-      assignedRoutine: { id: crypto.randomUUID(), name: "Mi rutina semanal", entries: [] },
+      assignedRoutine: {
+        id: crypto.randomUUID(),
+        name: "Mi rutina semanal",
+        startDate: new Date().toISOString().split("T")[0],
+        sessions: [],
+      },
       membershipLevel: data.membershipLevel,
       memberSince: new Date().toISOString().split("T")[0],
       isActive: true,
@@ -49,6 +55,16 @@ export const ProfileForm = (): React.JSX.Element => {
           })}
         />
         {errors.age && <span className="error">{errors.age.message}</span>}
+      </div>
+
+      <div className="form-group">
+        <label>Email</label>
+        <input
+          type="email"
+          {...register("email", { required: "Este campo es requerido" })}
+          placeholder="tu@email.com"
+        />
+        {errors.email && <span className="error">{errors.email.message}</span>}
       </div>
 
       <div className="form-group">

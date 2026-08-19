@@ -1,5 +1,23 @@
-import type { DayOfWeek } from "../types/enums";
-import type { RoutineEntry, ExercisePercentage, CatalogSummary, CategoryGroup, Exercise } from "../types/models";
+import type { DayOfWeek, ExerciseId } from "../types/enums";
+import type {
+  RoutineEntry,
+  ExercisePercentage,
+  CatalogSummary,
+  CategoryGroup,
+  Exercise,
+  WeeklyRoutine,
+  DaySession,
+  WeeklyLoad,
+  RestRecommendation,
+  FlattenRoutine,
+  CalculateWeeklyLoad,
+  GetRestRecommendation,
+  FindBestCalorieRoutineDay,
+  GetPendingExercises,
+  AddExerciseToRoutine,
+  ToggleExerciseCompleted,
+  SetSessionComment,
+} from "../types/models";
 
 export const calcCalories = (durationMinutes: number, caloriesPerMinute: number): number =>
   durationMinutes * caloriesPerMinute;
@@ -134,3 +152,89 @@ export const groupByCategory=(entries: RoutineEntry[]): CatalogSummary =>{
 }
   return { cardio, strength, flexibility };
 }
+
+export const flattenRoutine: FlattenRoutine = (routine: WeeklyRoutine): RoutineEntry[] =>
+  routine.sessions.flatMap((session: DaySession): RoutineEntry[] =>
+    session.exercises.map((exercise: Exercise): RoutineEntry => ({ day: session.day, exercise }))
+  );
+
+export const calculateWeeklyLoad: CalculateWeeklyLoad = (routine: WeeklyRoutine): WeeklyLoad => {
+  const entries = flattenRoutine(routine);
+  const { cardio, strength, flexibility } = groupByCategory(entries);
+  return {
+    totalMinutes: cardio.totalMinutes + strength.totalMinutes + flexibility.totalMinutes,
+    totalCalories: cardio.totalCalories + strength.totalCalories + flexibility.totalCalories,
+    cardioMinutes: cardio.totalMinutes,
+    strengthMinutes: strength.totalMinutes,
+    flexibilityMinutes: flexibility.totalMinutes,
+    daysTrained: getUniqueDays(entries).length,
+  };
+};
+
+export const getRestRecommendation: GetRestRecommendation = (load: WeeklyLoad): RestRecommendation => {
+  if (load.daysTrained > 5 || load.totalMinutes > 300) {
+    return {
+      level: "high",
+      message: "Estás entrenando muchos días o minutos esta semana. Considerá agregar un día de descanso.",
+    };
+  }
+  if (load.daysTrained < 3 || load.totalMinutes < 150) {
+    return {
+      level: "low",
+      message: "Considerá agregar un día más de entrenamiento esta semana.",
+    };
+  }
+  return { level: "ok", message: "Tu carga semanal está balanceada." };
+};
+
+export const findBestCalorieRoutineDay: FindBestCalorieRoutineDay = (routine: WeeklyRoutine): DaySession | null => {
+  const bestDay = findBestCalorieDay(flattenRoutine(routine));
+  if (bestDay === null) return null;
+  return routine.sessions.find((session: DaySession): boolean => session.day === bestDay) ?? null;
+};
+
+export const getPendingExercises: GetPendingExercises = (routine: WeeklyRoutine): RoutineEntry[] =>
+  flattenRoutine(routine).filter((entry: RoutineEntry): boolean => !entry.exercise.completed);
+
+export const addExerciseToRoutine: AddExerciseToRoutine = (
+  routine: WeeklyRoutine,
+  day: DayOfWeek,
+  exercise: Exercise
+): WeeklyRoutine => {
+  const hasSession = routine.sessions.some((session: DaySession): boolean => session.day === day);
+  const sessions = hasSession
+    ? routine.sessions.map((session: DaySession): DaySession =>
+        session.day === day ? { ...session, exercises: [...session.exercises, exercise] } : session
+      )
+    : [...routine.sessions, { day, exercises: [exercise] }];
+  return { ...routine, sessions };
+};
+
+export const toggleExerciseCompleted: ToggleExerciseCompleted = (
+  routine: WeeklyRoutine,
+  day: DayOfWeek,
+  exerciseId: ExerciseId
+): WeeklyRoutine => ({
+  ...routine,
+  sessions: routine.sessions.map((session: DaySession): DaySession =>
+    session.day !== day
+      ? session
+      : {
+          ...session,
+          exercises: session.exercises.map((exercise: Exercise): Exercise =>
+            exercise.id === exerciseId ? { ...exercise, completed: !exercise.completed } : exercise
+          ),
+        }
+  ),
+});
+
+export const setSessionComment: SetSessionComment = (
+  routine: WeeklyRoutine,
+  day: DayOfWeek,
+  comment: string
+): WeeklyRoutine => ({
+  ...routine,
+  sessions: routine.sessions.map((session: DaySession): DaySession =>
+    session.day === day ? { ...session, comment } : session
+  ),
+});
