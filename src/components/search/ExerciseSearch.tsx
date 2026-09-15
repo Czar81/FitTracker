@@ -64,7 +64,7 @@ export const ExerciseSearch = ({ localCatalogCount }: ExerciseSearchProps): Reac
 
   return (
     <div className="exercise-search">
-      <h2>🌐 Buscar ejercicios (API externa)</h2>
+      <h2>Buscar ejercicios</h2>
 
       <div className="exercise-search-controls">
         <div className="form-group">
@@ -104,10 +104,10 @@ export const ExerciseSearch = ({ localCatalogCount }: ExerciseSearchProps): Reac
 
       {status === "success" && (
         <div className="exercise-search-results">
-          <h3>📊 Resultados de búsqueda, muscle: {muscle}</h3>
+          <h3>Resultados de búsqueda, muscle: {muscle}</h3>
 
           <div className="exercise-search-group">
-            <h4>✅ Válidos ({accepted.length})</h4>
+            <h4>Válidos ({accepted.length})</h4>
             {accepted.length === 0 ? (
               <p className="category-empty">Sin resultados válidos para este grupo muscular.</p>
             ) : (
@@ -118,11 +118,11 @@ export const ExerciseSearch = ({ localCatalogCount }: ExerciseSearchProps): Reac
                     <span>{result.raw.name} · {result.exercise?.type} {isAdded ? "| agregado" : ""}</span>
                     <button
                       type="button"
-                      className="submit-btn submit-btn--small"
+                      className="submit-btn submit-btn--small add-btn"
                       disabled={isAdded}
                       onClick={(): void => handleAdd(result)}
                     >
-                      {isAdded ? "✅ Agregado" : "Agregar al catálogo"}
+                      {isAdded ? "Agregado" : "Agregar al catálogo"}
                     </button>
                   </div>
                 );
@@ -131,7 +131,7 @@ export const ExerciseSearch = ({ localCatalogCount }: ExerciseSearchProps): Reac
           </div>
 
           <div className="exercise-search-group">
-            <h4>⚠️ Datos incompletos ({incomplete.length})</h4>
+            <h4>Datos incompletos ({incomplete.length})</h4>
             {incomplete.map((result: ExternalExerciseValidation, index: number) => (
               <div key={index} className="exercise-search-row exercise-search-row--incomplete">
                 <span>{result.raw.name || "(sin nombre)"} · faltan: {result.missingFields.join(", ")}</span>

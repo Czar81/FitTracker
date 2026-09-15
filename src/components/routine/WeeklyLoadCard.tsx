@@ -10,7 +10,7 @@ export const WeeklyLoadCard = ({ routine, load, recommendation }: WeeklyLoadCard
 
   return (
     <div className="weekly-load-card">
-      <h2>📊 Carga semanal</h2>
+      <h2>Carga semanal</h2>
       <div className="weekly-load-totals">
         <span>{formatDuration(load.totalMinutes)}</span>
         <span>{load.totalCalories.toFixed(0)} kcal</span>

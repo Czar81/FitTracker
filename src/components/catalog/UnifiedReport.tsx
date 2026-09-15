@@ -40,7 +40,7 @@ export const UnifiedReportView = ({ report }: UnifiedReportProps): React.JSX.Ele
               <ul>
                 {group.entries.map((entry) => (
                   <li key={entry.exercise.id}>
-                    {entry.exercise.name}{entry.exercise.source === "api" ? " 🌐" : ""}, {formatDuration(entry.exercise.durationMinutes)} | {generateExerciseDescription(entry.exercise)}
+                    {entry.exercise.name}, {formatDuration(entry.exercise.durationMinutes)} | {generateExerciseDescription(entry.exercise)}
                   </li>
                 ))}
               </ul>

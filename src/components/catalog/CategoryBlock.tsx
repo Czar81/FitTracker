@@ -30,7 +30,7 @@ export const CategoryBlock = ({ group, label }: CategoryBlockProps): React.JSX.E
             return (
               <div key={index} className="category-exercise-row">
                 <span className="category-exercise-line">
-                  {STATUS_ICON[entry.exercise.status]} {entry.exercise.name}{entry.exercise.source === "api" ? " 🌐" : ""}, {formatDuration(entry.exercise.durationMinutes)} | {generateExerciseDescription(entry.exercise)} | {calories.toFixed(0)} kcal
+                  {STATUS_ICON[entry.exercise.status]}, {formatDuration(entry.exercise.durationMinutes)} | {generateExerciseDescription(entry.exercise)} | {calories.toFixed(0)} kcal
                 </span>
               </div>
             );

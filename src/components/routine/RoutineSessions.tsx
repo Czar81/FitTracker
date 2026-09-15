@@ -28,7 +28,7 @@ export const RoutineSessions = ({ routine }: RoutineSessionsProps): React.JSX.El
 
   return (
     <div className="routine-sessions">
-      <h2>📋 {routine.name}</h2>
+      <h2>{routine.name}</h2>
       <p className="routine-start-date">Semana desde: {routine.startDate}</p>
 
       {DAYS.map((day: DayOfWeek) => {
