@@ -5,6 +5,9 @@ import type {
   CatalogSummary,
   CategoryGroup,
   Exercise,
+  CardioExercise,
+  StrengthExercise,
+  FlexibilityExercise,
   WeeklyRoutine,
   DaySession,
   WeeklyLoad,
@@ -15,8 +18,16 @@ import type {
   FindBestCalorieRoutineDay,
   GetPendingExercises,
   AddExerciseToRoutine,
-  ToggleExerciseCompleted,
+  SetExerciseStatus,
   SetSessionComment,
+  IsCardioExercise,
+  IsStrengthExercise,
+  IsFlexibilityExercise,
+  CategorizedExercises,
+  CategorizeExercises,
+  ExternalExerciseRaw,
+  ExternalExerciseValidation,
+  ValidateExternalExercise,
 } from "../types/models";
 
 export const calcCalories = (durationMinutes: number, caloriesPerMinute: number): number =>
@@ -63,16 +74,39 @@ export const formatDuration = (minutes: number): string => {
 export const findBestCalorieDay = (entries: RoutineEntry[]): DayOfWeek | null => {
   if (entries.length === 0) return null;
 
-  const caloriesByDay = entries.reduce((acc: Record<string, number>, entry: RoutineEntry): Record<string, number> => {
-    acc[entry.day] = (acc[entry.day] ?? 0) + calcCalories(entry.exercise.durationMinutes, entry.exercise.caloriesPerMinute);
-    return acc;
-  }, {});
+  const caloriesByDay: Record<string, number> = entries.reduce(
+    (acc: Record<string, number>, entry: RoutineEntry): Record<string, number> => {
+      acc[entry.day] =
+        (acc[entry.day] ?? 0) + calcCalories(entry.exercise.durationMinutes, entry.exercise.caloriesPerMinute);
+      return acc;
+    },
+    {}
+  );
 
-  return Object.entries(caloriesByDay).reduce(
-    (bestDay: string, [day, calories]: [string, number]): string =>
-      calories > caloriesByDay[bestDay] ? day : bestDay,
-    Object.keys(caloriesByDay)[0]
-  ) as DayOfWeek;
+  const validDays: DayOfWeek[] = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
+  ];
+
+  const bestEntry = Object.entries(caloriesByDay).reduce<readonly [string, number] | null>(
+    (best: readonly [string, number] | null, current: readonly [string, number]): readonly [string, number] | null => {
+      if (best === null || current[1] > best[1]) {
+        return current;
+      }
+      return best;
+    },
+    null
+  );
+
+  if (bestEntry === null) return null;
+  const [bestDay] = bestEntry;
+  const bestDayMatch = validDays.find((day: DayOfWeek): boolean => day === bestDay);
+  return bestDayMatch ?? null;
 };
 
 const isBonus = (exercise: Exercise): boolean => {
@@ -194,7 +228,7 @@ export const findBestCalorieRoutineDay: FindBestCalorieRoutineDay = (routine: We
 };
 
 export const getPendingExercises: GetPendingExercises = (routine: WeeklyRoutine): RoutineEntry[] =>
-  flattenRoutine(routine).filter((entry: RoutineEntry): boolean => !entry.exercise.completed);
+  flattenRoutine(routine).filter((entry: RoutineEntry): boolean => entry.exercise.status === "pending");
 
 export const addExerciseToRoutine: AddExerciseToRoutine = (
   routine: WeeklyRoutine,
@@ -210,10 +244,11 @@ export const addExerciseToRoutine: AddExerciseToRoutine = (
   return { ...routine, sessions };
 };
 
-export const toggleExerciseCompleted: ToggleExerciseCompleted = (
+export const setExerciseStatus: SetExerciseStatus = (
   routine: WeeklyRoutine,
   day: DayOfWeek,
-  exerciseId: ExerciseId
+  exerciseId: ExerciseId,
+  status
 ): WeeklyRoutine => ({
   ...routine,
   sessions: routine.sessions.map((session: DaySession): DaySession =>
@@ -222,7 +257,7 @@ export const toggleExerciseCompleted: ToggleExerciseCompleted = (
       : {
           ...session,
           exercises: session.exercises.map((exercise: Exercise): Exercise =>
-            exercise.id === exerciseId ? { ...exercise, completed: !exercise.completed } : exercise
+            exercise.id === exerciseId ? { ...exercise, status } : exercise
           ),
         }
   ),
@@ -238,3 +273,139 @@ export const setSessionComment: SetSessionComment = (
     session.day === day ? { ...session, comment } : session
   ),
 });
+
+// --- Sprint 3: identificación de tipo en tiempo de ejecución -----------------
+// Type guards sobre el discriminante "type": el compilador impide llamar a un
+// campo específico de una variante si primero no se pasó por uno de estos.
+export const isCardioExercise: IsCardioExercise = (exercise: Exercise): exercise is CardioExercise =>
+  exercise.type === "Cardio";
+
+export const isStrengthExercise: IsStrengthExercise = (exercise: Exercise): exercise is StrengthExercise =>
+  exercise.type === "Strength";
+
+export const isFlexibilityExercise: IsFlexibilityExercise = (exercise: Exercise): exercise is FlexibilityExercise =>
+  exercise.type === "Flexibility";
+
+export const categorizeExercises: CategorizeExercises = (exercises: Exercise[]): CategorizedExercises => {
+  const result: CategorizedExercises = { cardio: [], strength: [], flexibility: [] };
+
+  for (const exercise of exercises) {
+    if (isCardioExercise(exercise)) {
+      result.cardio.push(exercise);
+    } else if (isStrengthExercise(exercise)) {
+      result.strength.push(exercise);
+    } else if (isFlexibilityExercise(exercise)) {
+      result.flexibility.push(exercise);
+    } else {
+      const _exhaustive: never = exercise;
+      return _exhaustive;
+    }
+  }
+
+  return result;
+};
+
+// --- Sprint 3: integración con la API externa (api-ninjas.com) --------------
+// La API devuelve "type" en minúscula y con varias etiquetas posibles; acá se
+// traduce a nuestra ExerciseCategory sin adivinar: si no se reconoce, null.
+const mapApiTypeToCategory = (apiType: string): "Cardio" | "Strength" | "Flexibility" | null => {
+  const normalized = apiType.trim().toLowerCase();
+  switch (normalized) {
+    case "cardio":
+      return "Cardio";
+    case "strength":
+    case "powerlifting":
+    case "olympic_weightlifting":
+    case "strongman":
+    case "plyometrics":
+      return "Strength";
+    case "stretching":
+      return "Flexibility";
+    default:
+      return null;
+  }
+};
+
+const REQUIRED_EXTERNAL_FIELDS: (keyof ExternalExerciseRaw)[] = [
+  "name",
+  "type",
+  "muscle",
+  "equipment",
+  "difficulty",
+  "instructions",
+];
+
+// Valores por defecto para completar el Exercise del dominio, ya que la API
+// externa no reporta duración, calorías ni métricas de desempeño.
+const buildExerciseFromExternal = (raw: ExternalExerciseRaw, category: "Cardio" | "Strength" | "Flexibility"): Exercise => {
+  const id = crypto.randomUUID();
+
+  switch (category) {
+    case "Cardio": {
+      const durationMinutes = 30;
+      const caloriesPerMinute = 10;
+      const distanceKm = 5;
+      return {
+        id,
+        name: raw.name,
+        type: "Cardio",
+        durationMinutes,
+        caloriesPerMinute,
+        status: "pending",
+        source: "api",
+        distanceKm,
+        rhythm: calcPace(durationMinutes, distanceKm),
+        heartRateZone: `Zona 2 (${raw.difficulty})`,
+        caloriesBurned: calcCalories(durationMinutes, caloriesPerMinute),
+      };
+    }
+    case "Strength": {
+      const durationMinutes = 30;
+      const caloriesPerMinute = 8;
+      return {
+        id,
+        name: raw.name,
+        type: "Strength",
+        durationMinutes,
+        caloriesPerMinute,
+        status: "pending",
+        source: "api",
+        sets: 3,
+        weight: 20,
+        repetitions: 10,
+      };
+    }
+    case "Flexibility": {
+      const durationMinutes = 30;
+      const caloriesPerMinute = 4;
+      return {
+        id,
+        name: raw.name,
+        type: "Flexibility",
+        durationMinutes,
+        caloriesPerMinute,
+        status: "pending",
+        source: "api",
+        poses: 6,
+        comments: `Equipo: ${raw.equipment || "ninguno"} · Dificultad: ${raw.difficulty}`,
+      };
+    }
+  }
+};
+
+export const validateExternalExercise: ValidateExternalExercise = (raw: ExternalExerciseRaw): ExternalExerciseValidation => {
+  const missingFields = REQUIRED_EXTERNAL_FIELDS.filter(
+    (field: keyof ExternalExerciseRaw): boolean => raw[field] == null || raw[field].trim() === ""
+  );
+
+  const category = mapApiTypeToCategory(raw.type);
+  if (category === null && !missingFields.includes("type")) {
+    missingFields.push("type");
+  }
+
+  if (missingFields.length > 0 || category === null) {
+    return { raw, valid: false, missingFields, exercise: null };
+  }
+
+  return { raw, valid: true, missingFields: [], exercise: buildExerciseFromExternal(raw, category) };
+};
