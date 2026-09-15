@@ -20,7 +20,7 @@ const DAYS: DayOfWeek[] = [
 type SearchStatus = "idle" | "loading" | "success" | "error";
 
 export const ExerciseSearch = ({ localCatalogCount }: ExerciseSearchProps): React.JSX.Element => {
-  const { addExercise } = useUserStore();
+  const { addExercise, setIncompleteExternalExercises } = useUserStore();
   const [muscle, setMuscle] = useState<MuscleGroup>("chest");
   const [day, setDay] = useState<DayOfWeek>("Monday");
   const [status, setStatus] = useState<SearchStatus>("idle");
@@ -39,7 +39,9 @@ export const ExerciseSearch = ({ localCatalogCount }: ExerciseSearchProps): Reac
     setErrorMessage("");
     try {
       const raw = await searchExercisesByMuscle(muscle);
-      setResults(raw.map(validateExternalExercise));
+      const validations = raw.map(validateExternalExercise);
+      setResults(validations);
+      setIncompleteExternalExercises(validations.filter((result: ExternalExerciseValidation): boolean => !result.valid));
       setAddedIds(new Set());
       setStatus("success");
     } catch (error) {
@@ -48,6 +50,7 @@ export const ExerciseSearch = ({ localCatalogCount }: ExerciseSearchProps): Reac
         : "Ocurrió un error inesperado al buscar ejercicios.";
       setErrorMessage(message);
       setResults([]);
+      setIncompleteExternalExercises([]);
       setStatus("error");
     }
   };
