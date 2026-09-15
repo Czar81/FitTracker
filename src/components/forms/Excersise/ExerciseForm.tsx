@@ -14,14 +14,23 @@ const DAYS: DayOfWeek[] = [
 
 const CATEGORIES: ExerciseCategory[] = ["Cardio", "Strength", "Flexibility"];
 
+const isExerciseCategory = (value: string): value is ExerciseCategory =>
+  CATEGORIES.some((category: ExerciseCategory): boolean => category === value);
+
 export const ExerciseForm = ({ onExerciseAdded }: ExerciseFormProps): React.JSX.Element => {
   const [category, setCategory] = useState<ExerciseCategory | "">("");
   const { register, handleSubmit, formState: { errors }, reset } = useForm<FlatExerciseFormInput>();
   const { addExercise } = useUserStore();
 
   const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>): void => {
-    const next = e.target.value as ExerciseCategory | "";
-    setCategory(next);
+    const next = e.target.value;
+    if (next === "") {
+      setCategory("");
+      return;
+    }
+    if (isExerciseCategory(next)) {
+      setCategory(next);
+    }
   };
 
   const onSubmit: SubmitHandler<FlatExerciseFormInput> = (data: FlatExerciseFormInput): void => {
@@ -38,7 +47,8 @@ export const ExerciseForm = ({ onExerciseAdded }: ExerciseFormProps): React.JSX.
           name: data.exerciseName,
           durationMinutes: data.durationMinutes,
           caloriesPerMinute: data.caloriesPerMinute,
-          completed: data.completed ?? false,
+          status: data.status ?? "pending",
+          source: "local",
           distanceKm: data.distanceKm,
           rhythm: calcPace(data.durationMinutes, data.distanceKm),
           heartRateZone: data.heartRateZone,
@@ -56,7 +66,8 @@ export const ExerciseForm = ({ onExerciseAdded }: ExerciseFormProps): React.JSX.
           name: data.exerciseName,
           durationMinutes: data.durationMinutes,
           caloriesPerMinute: data.caloriesPerMinute,
-          completed: data.completed ?? false,
+          status: data.status ?? "pending",
+          source: "local",
           sets: data.sets,
           weight: data.weight,
           repetitions: data.repetitions,
@@ -73,7 +84,8 @@ export const ExerciseForm = ({ onExerciseAdded }: ExerciseFormProps): React.JSX.
           name: data.exerciseName,
           durationMinutes: data.durationMinutes,
           caloriesPerMinute: data.caloriesPerMinute,
-          completed: data.completed ?? false,
+          status: data.status ?? "pending",
+          source: "local",
           poses: data.poses,
           comments: data.comments,
         };
@@ -261,11 +273,13 @@ export const ExerciseForm = ({ onExerciseAdded }: ExerciseFormProps): React.JSX.
         </>
       )}
 
-      <div className="form-group form-group--checkbox">
-        <label>
-          <input type="checkbox" {...register("completed")} />
-          {" "}Completado
-        </label>
+      <div className="form-group">
+        <label>Estado</label>
+        <select {...register("status")} defaultValue="pending">
+          <option value="pending">Pendiente</option>
+          <option value="completed">Completado</option>
+          <option value="skipped">Saltado</option>
+        </select>
       </div>
 
       <button type="submit" className="submit-btn">Agregar ejercicio</button>
