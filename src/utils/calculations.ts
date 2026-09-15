@@ -28,6 +28,7 @@ import type {
   ExternalExerciseRaw,
   ExternalExerciseValidation,
   ValidateExternalExercise,
+  UnifiedReport,
 } from "../types/models";
 
 export const calcCalories = (durationMinutes: number, caloriesPerMinute: number): number =>
@@ -187,6 +188,23 @@ export const groupByCategory=(entries: RoutineEntry[]): CatalogSummary =>{
   return { cardio, strength, flexibility };
 }
 
+export const buildUnifiedReport = (
+  entries: RoutineEntry[],
+  incomplete: ExternalExerciseValidation[]
+): UnifiedReport => {
+  const summary = groupByCategory(entries);
+  const groups = [summary.cardio, summary.strength, summary.flexibility];
+
+  return {
+    summary,
+    totalExercises: entries.length,
+    totalMinutes: groups.reduce((total: number, group: CategoryGroup): number => total + group.totalMinutes, 0),
+    localExercises: entries.filter((entry: RoutineEntry): boolean => entry.exercise.source === "local").length,
+    apiExercises: entries.filter((entry: RoutineEntry): boolean => entry.exercise.source === "api").length,
+    incomplete,
+  };
+};
+
 export const flattenRoutine: FlattenRoutine = (routine: WeeklyRoutine): RoutineEntry[] =>
   routine.sessions.flatMap((session: DaySession): RoutineEntry[] =>
     session.exercises.map((exercise: Exercise): RoutineEntry => ({ day: session.day, exercise }))
@@ -330,7 +348,6 @@ const REQUIRED_EXTERNAL_FIELDS: (keyof ExternalExerciseRaw)[] = [
   "name",
   "type",
   "muscle",
-  "equipment",
   "difficulty",
   "instructions",
 ];

@@ -213,3 +213,12 @@ export interface ExerciseSearchResult {
   accepted: ExternalExerciseValidation[];
   incomplete: ExternalExerciseValidation[];
 }
+
+export interface UnifiedReport {
+  summary: CatalogSummary;
+  totalExercises: number;
+  totalMinutes: number;
+  localExercises: number;
+  apiExercises: number;
+  incomplete: ExternalExerciseValidation[];
+}
