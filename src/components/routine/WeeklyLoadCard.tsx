@@ -32,7 +32,7 @@ export const WeeklyLoadCard = ({ routine, load, recommendation }: WeeklyLoadCard
           <h3>Ejercicios pendientes</h3>
           <ul>
             {pendingExercises.map((entry: RoutineEntry) => (
-              <li key={entry.exercise.id}>❌ {entry.exercise.name} — {entry.day}</li>
+              <li key={entry.exercise.id}>⏳ {entry.exercise.name} — {entry.day}</li>
             ))}
           </ul>
         </div>
