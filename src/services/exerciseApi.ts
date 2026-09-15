@@ -13,15 +13,18 @@ export class ExerciseApiError extends Error {}
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === "object" && value !== null;
 
+const isNonEmptyString = (value: unknown): value is string =>
+  typeof value === "string" && value.trim().length > 0;
+
 const isExternalExerciseRawShape = (value: unknown): value is ExternalExerciseRaw => {
   if (!isRecord(value)) return false;
   const candidate = value;
   return (
-    typeof candidate.name === "string" &&
-    typeof candidate.type === "string" &&
-    typeof candidate.muscle === "string" &&
-    typeof candidate.difficulty === "string" &&
-    typeof candidate.instructions === "string" &&
+    isNonEmptyString(candidate.name) &&
+    isNonEmptyString(candidate.type) &&
+    isNonEmptyString(candidate.muscle) &&
+    isNonEmptyString(candidate.difficulty) &&
+    isNonEmptyString(candidate.instructions) && // 🎯 Fix: rechaza instrucciones vacías ("") o con espacios
     (typeof candidate.equipment === "string" || Array.isArray(candidate.equipments))
   );
 };
