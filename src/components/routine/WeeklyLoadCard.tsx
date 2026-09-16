@@ -10,7 +10,7 @@ export const WeeklyLoadCard = ({ routine, load, recommendation }: WeeklyLoadCard
 
   return (
     <div className="weekly-load-card">
-      <h2>📊 Carga semanal</h2>
+      <h2>Carga semanal</h2>
       <div className="weekly-load-totals">
         <span>{formatDuration(load.totalMinutes)}</span>
         <span>{load.totalCalories.toFixed(0)} kcal</span>
@@ -32,7 +32,7 @@ export const WeeklyLoadCard = ({ routine, load, recommendation }: WeeklyLoadCard
           <h3>Ejercicios pendientes</h3>
           <ul>
             {pendingExercises.map((entry: RoutineEntry) => (
-              <li key={entry.exercise.id}>❌ {entry.exercise.name} — {entry.day}</li>
+              <li key={entry.exercise.id}>⏳ {entry.exercise.name} — {entry.day}</li>
             ))}
           </ul>
         </div>

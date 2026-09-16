@@ -1,22 +1,25 @@
 import { ProfileForm } from './components/forms/Profile/ProfileForm';
 import { ExerciseForm } from './components/forms/Excersise/ExerciseForm';
+import { ExerciseSearch } from './components/search/ExerciseSearch';
 import { ExerciseCatalog } from './components/catalog/ExerciseCatalog';
+import { UnifiedReportView } from './components/catalog/UnifiedReport';
 import { RoutineSessions } from './components/routine/RoutineSessions';
 import { WeeklyLoadCard } from './components/routine/WeeklyLoadCard';
 import { InstructorView } from './components/routine/InstructorView';
 import Summary from './components/generic/summary';
 import { useUserStore } from './store/userStore';
-import { flattenRoutine, calculateWeeklyLoad, getRestRecommendation } from './utils/calculations';
+import { flattenRoutine, calculateWeeklyLoad, getRestRecommendation, buildUnifiedReport } from './utils/calculations';
 import { buildInstructor } from './utils/seedData';
 import './App.css';
 
 function App() {
-  const { isProfileSet, user } = useUserStore();
+  const { isProfileSet, user, incompleteExternalExercises } = useUserStore();
 
   const entries = user !== null ? flattenRoutine(user.assignedRoutine) : [];
   const weeklyLoad = user !== null ? calculateWeeklyLoad(user.assignedRoutine) : null;
   const recommendation = weeklyLoad !== null ? getRestRecommendation(weeklyLoad) : null;
   const instructor = user !== null ? buildInstructor(user) : null;
+  const unifiedReport = buildUnifiedReport(entries, incompleteExternalExercises);
 
   return (
     <div className="app-wrapper">
@@ -72,6 +75,10 @@ function App() {
             <div className="dashboard-right">
               {user != null && <RoutineSessions routine={user.assignedRoutine} />}
 
+              <ExerciseSearch
+                localCatalogCount={entries.filter((entry) => entry.exercise.source === "local").length}
+              />
+
               {entries.length > 0 ? (
                 <>
                   <ExerciseCatalog entries={entries} />
@@ -84,6 +91,10 @@ function App() {
                 <div className="empty-state">
                   <p>Agrega tu primer ejercicio para ver las estadisticas</p>
                 </div>
+              )}
+
+              {(entries.length > 0 || incompleteExternalExercises.length > 0) && (
+                <UnifiedReportView report={unifiedReport} />
               )}
 
               {instructor != null && <InstructorView instructor={instructor} />}

@@ -1,14 +1,18 @@
 import { create } from "zustand";
-import type { Exercise, UserProfile } from "../types/models";
-import type { DayOfWeek, ExerciseId } from "../types/enums";
+import type { Exercise, ExternalExerciseValidation, UserProfile } from "../types/models";
+import type { DayOfWeek, ExerciseId, WorkoutStatus } from "../types/enums";
 import type { UserState } from "../types/state";
-import { addExerciseToRoutine, toggleExerciseCompleted, setSessionComment } from "../utils/calculations";
+import { addExerciseToRoutine, setExerciseStatus, setSessionComment } from "../utils/calculations";
 
 export const useUserStore = create<UserState>((set) => ({
   user: null,
   isProfileSet: false,
+  incompleteExternalExercises: [],
 
   setProfile: (data: UserProfile): void => set({ user: data, isProfileSet: true }),
+
+  setIncompleteExternalExercises: (results: ExternalExerciseValidation[]): void =>
+    set({ incompleteExternalExercises: results }),
 
   addExercise: (day: DayOfWeek, exercise: Exercise): void =>
     set((state: UserState) => {
@@ -18,13 +22,13 @@ export const useUserStore = create<UserState>((set) => ({
       };
     }),
 
-  toggleExerciseCompleted: (day: DayOfWeek, exerciseId: ExerciseId): void =>
+  setExerciseStatus: (day: DayOfWeek, exerciseId: ExerciseId, status: WorkoutStatus): void =>
     set((state: UserState) => {
       if (state.user === null) return {};
       return {
         user: {
           ...state.user,
-          assignedRoutine: toggleExerciseCompleted(state.user.assignedRoutine, day, exerciseId),
+          assignedRoutine: setExerciseStatus(state.user.assignedRoutine, day, exerciseId, status),
         },
       };
     }),
