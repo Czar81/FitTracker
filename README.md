@@ -14,33 +14,34 @@ A fitness tracking web app built with React, TypeScript, and Vite. Users build a
 ## Project Structure
 
 ```text
-src/
-├── types/
-│   ├── models.ts              # Domain entities: Exercise (Cardio, Strength, Flexibility), DaySession, ExternalExerciseRaw, etc.
-│   ├── enums.ts                # Literal unions (WorkoutState, MuscleGroup) and id aliases
-│   ├── forms.ts                 # Form input and component prop types
-│   └── state.ts                  # Zustand store contract & search state definitions
-├── services/
-│   └── exerciseApi.ts         # External API fetcher (api-ninjas.com) with strict type checks
-├── utils/
-│   ├── calculations.ts        # Pure functions: calcCalories, calculateWeeklyLoad, etc.
-│   ├── descriptions.ts         # Per-category exercise description text
-│   └── seedData.ts               # Demo data for testing & instructor views
-├── store/
-│   └── userStore.tsx            # Zustand store (Users, Catalog, Routines & External Search state)
-└── components/
-    ├── forms/
-    │   ├── Profile/            # Profile registration form
-    │   └── Excersise/           # Add-exercise form (assigns to a day)
-    ├── catalog/                  # Category breakdown & UnifiedReport component
-    ├── search/                   # ExerciseSearch component (API lookup & incomplete data handling)
-    ├── routine/
-    │   ├── RoutineSessions.tsx  # Day-by-day session view with WorkoutState (pendiente/completado/saltado)
-    │   ├── WeeklyLoadCard.tsx    # Weekly load & rest recommendation
-    │   └── InstructorView.tsx    # Instructor view of supervised users
-    └── generic/
-        └── summary.tsx            # Comparative summary
-
+.
+├── .env
+└── src/
+    ├── types/
+    │   ├── models.ts              # Domain entities: Exercise (Cardio, Strength, Flexibility), DaySession, ExternalExerciseRaw, etc.
+    │   ├── enums.ts                # Literal unions (WorkoutState, MuscleGroup) and id aliases
+    │   ├── forms.ts                 # Form input and component prop types
+    │   └── state.ts                  # Zustand store contract & search state definitions
+    ├── services/
+    │   └── exerciseApi.ts         # External API fetcher (api-ninjas.com) with strict type checks
+    ├── utils/
+    │   ├── calculations.ts        # Pure functions: calcCalories, calculateWeeklyLoad, etc.
+    │   ├── descriptions.ts         # Per-category exercise description text
+    │   └── seedData.ts               # Demo data for testing & instructor views
+    ├── store/
+    │   └── userStore.tsx            # Zustand store (Users, Catalog, Routines & External Search state)
+    └── components/
+        ├── forms/
+        │   ├── Profile/            # Profile registration form
+        │   └── Excersise/           # Add-exercise form (assigns to a day)
+        ├── catalog/                  # Category breakdown & UnifiedReport component
+        ├── search/                   # ExerciseSearch component (API lookup & incomplete data handling)
+        ├── routine/
+        │   ├── RoutineSessions.tsx  # Day-by-day session view with WorkoutState (pendiente/completado/saltado)
+        │   ├── WeeklyLoadCard.tsx    # Weekly load & rest recommendation
+        │   └── InstructorView.tsx    # Instructor view of supervised users
+        └── generic/
+            └── summary.tsx            # Comparative summary
 ```
 
 ## Getting Started
@@ -53,6 +54,8 @@ src/
 ### Environment Variables
 
 Create a `.env` file in the root directory and add your API-Ninjas key:
+
+You can create the key here [api-ninjas](https://api-ninjas.com/)
 
 ```env
 VITE_API_NINJAS_KEY=your_api_key_here
