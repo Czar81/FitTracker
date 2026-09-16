@@ -1,8 +1,15 @@
 import React from "react";
 import type { RoutineEntry } from "../../types/models";
+import type { WorkoutStatus } from "../../types/enums";
 import type { CategoryBlockProps } from "../../types/forms";
 import { generateExerciseDescription } from "../../utils/descriptions";
 import { calcCalories, formatDuration } from "../../utils/calculations";
+
+const STATUS_ICON: Record<WorkoutStatus, string> = {
+  pending: "⏳",
+  completed: "✅",
+  skipped: "⏭️",
+};
 
 export const CategoryBlock = ({ group, label }: CategoryBlockProps): React.JSX.Element => {
   return (
@@ -23,7 +30,7 @@ export const CategoryBlock = ({ group, label }: CategoryBlockProps): React.JSX.E
             return (
               <div key={index} className="category-exercise-row">
                 <span className="category-exercise-line">
-                  {entry.exercise.completed ? "✅" : "❌"} {entry.exercise.name}, {formatDuration(entry.exercise.durationMinutes)} | {generateExerciseDescription(entry.exercise)} | {calories.toFixed(0)} kcal
+                  {STATUS_ICON[entry.exercise.status]}, {formatDuration(entry.exercise.durationMinutes)} | {generateExerciseDescription(entry.exercise)} | {calories.toFixed(0)} kcal
                 </span>
               </div>
             );

@@ -1,4 +1,4 @@
-import type { DayOfWeek, ExperienceLevel, ExerciseCategory, MembershipLevel } from "./enums";
+import type { DayOfWeek, ExperienceLevel, ExerciseCategory, MembershipLevel, WorkoutStatus } from "./enums";
 import type { RoutineEntry, CategoryGroup, CatalogSummary, WeeklyRoutine, WeeklyLoad, RestRecommendation, Instructor } from "./models";
 
 export interface ProfileFormInput {
@@ -69,7 +69,7 @@ export type FlatExerciseFormInput = {
   durationMinutes: number;
   caloriesPerMinute: number;
   category: ExerciseCategory;
-  completed?: boolean;
+  status?: WorkoutStatus;
   // Cardio
   distanceKm?: number;
   heartRateZone?: string;
@@ -94,4 +94,8 @@ export type WeeklyLoadCardProps = {
 
 export type InstructorViewProps = {
   instructor: Instructor;
+};
+
+export type ExerciseSearchProps = {
+  localCatalogCount: number;
 };

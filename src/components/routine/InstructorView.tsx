@@ -6,7 +6,7 @@ import "./RoutineViews.css";
 
 export const InstructorView = ({ instructor }: InstructorViewProps): React.JSX.Element => (
   <div className="instructor-view">
-    <h2>👨‍🏫 Instructor: {instructor.name}</h2>
+    <h2>Instructor: {instructor.name}</h2>
     {instructor.assignedUsers.map((user: UserProfile) => {
       const load = calculateWeeklyLoad(user.assignedRoutine);
       return (
