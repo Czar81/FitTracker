@@ -9,9 +9,9 @@ type UnifiedReportProps = {
 };
 
 const CATEGORY_LABELS: Record<CategoryGroup["category"], string> = {
-  Cardio: "🏃 Cardio",
-  Strength: "💪 Fuerza",
-  Flexibility: "🧘 Flexibilidad",
+  Cardio: "Cardio",
+  Strength: "Fuerza",
+  Flexibility: "Flexibilidad",
 };
 
 export const UnifiedReportView = ({ report }: UnifiedReportProps): React.JSX.Element => {
@@ -50,7 +50,7 @@ export const UnifiedReportView = ({ report }: UnifiedReportProps): React.JSX.Ele
       </div>
 
       <div className="unified-report-incomplete">
-        <h3>⚠️ Datos incompletos ({report.incomplete.length})</h3>
+        <h3>Datos incompletos ({report.incomplete.length})</h3>
         {report.incomplete.length === 0 ? (
           <p>No hay ejercicios rechazados.</p>
         ) : (
