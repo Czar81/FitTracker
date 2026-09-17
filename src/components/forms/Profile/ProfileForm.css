@@ -56,9 +56,14 @@
   color: white;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: background 0.2s ease, transform 0.1s ease;
 }
 
 .submit-btn:hover {
   background: #357abd;
+}
+
+.submit-btn:active {
+  background: #2f6da8;
+  transform: translateY(1px);
 }
