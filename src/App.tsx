@@ -12,12 +12,14 @@ import Summary from './components/generic/summary';
 import { useUserStore } from './store/userStore';
 import { flattenRoutine, calculateWeeklyLoad, getRestRecommendation, buildUnifiedReport, buildDashboardSummary } from './utils/calculations';
 import { buildInstructor } from './utils/seedData';
+import { useTranslation } from 'react-i18next';
 import './App.css';
 
 type AppView = 'dashboard' | 'workspace';
 export type WorkspaceTab = DashboardSection;
 
 function App() {
+  const { t } = useTranslation();
   const { isProfileSet, user, incompleteExternalExercises, users, exerciseCatalog, routines, activityLog } =
     useUserStore();
   const [view, setView] = useState<AppView>('dashboard');
@@ -46,14 +48,14 @@ function App() {
               className={view === 'dashboard' ? 'app-nav-btn app-nav-btn--active' : 'app-nav-btn'}
               onClick={(): void => setView('dashboard')}
             >
-              Dashboard
+              {t('nav.dashboard')}
             </button>
             <button
               type="button"
               className={view === 'workspace' ? 'app-nav-btn app-nav-btn--active' : 'app-nav-btn'}
               onClick={(): void => setView('workspace')}
             >
-              Mi espacio
+              {t('nav.workspace')}
             </button>
           </nav>
         )}
@@ -70,36 +72,36 @@ function App() {
               <div className="dashboard-left">
                 {user != null && (
                   <div className="profile-card">
-                    <h2>Perfil de usuario</h2>
+                    <h2>{t('profile.title')}</h2>
                     <div className="profile-divider" />
                     <div className="profile-row">
-                      <span className="profile-label">Nombre</span>
+                      <span className="profile-label">{t('profile.name')}</span>
                       <span className="profile-value">{user.name}</span>
                     </div>
                     <div className="profile-row">
-                      <span className="profile-label">Edad</span>
+                      <span className="profile-label">{t('profile.age')}</span>
                       <span className="profile-value">{user.age}</span>
                     </div>
                     <div className="profile-row">
-                      <span className="profile-label">Email</span>
+                      <span className="profile-label">{t('profile.email')}</span>
                       <span className="profile-value">{user.email}</span>
                     </div>
                     <div className="profile-row">
-                      <span className="profile-label">Nivel</span>
-                      <span className="profile-badge">{user.experienceLevel}</span>
+                      <span className="profile-label">{t('profile.level')}</span>
+                      <span className="profile-badge">{t(`levels.${user.experienceLevel}`)}</span>
                     </div>
                     <div className="profile-row">
-                      <span className="profile-label">Membresía</span>
-                      <span className="profile-badge">{user.membershipLevel}</span>
+                      <span className="profile-label">{t('profile.membership')}</span>
+                      <span className="profile-badge">{t(`levels.${user.membershipLevel}`)}</span>
                     </div>
                     <div className="profile-row">
-                      <span className="profile-label">Desde</span>
+                      <span className="profile-label">{t('profile.since')}</span>
                       <span className="profile-value">{user.memberSince}</span>
                     </div>
                     <div className="profile-row">
-                      <span className="profile-label">Estado</span>
+                      <span className="profile-label">{t('profile.status')}</span>
                       <span className={user.isActive ? 'profile-badge' : 'profile-badge profile-badge--inactive'}>
-                        {user.isActive ? 'Activo' : 'Inactivo'}
+                        {user.isActive ? t('profile.active') : t('profile.inactive')}
                       </span>
                     </div>
                   </div>
@@ -108,7 +110,7 @@ function App() {
               </div>
 
               <div className="dashboard-right">
-                <div className="workspace-tabs" role="tablist" aria-label="Secciones de Mi espacio">
+                  <div className="workspace-tabs" role="tablist" aria-label={t('nav.workspaceSections')}>
                   <button
                     type="button"
                     role="tab"
@@ -116,7 +118,7 @@ function App() {
                     className={activeTab === 'routine' ? 'tab-btn tab-btn--active' : 'tab-btn'}
                     onClick={(): void => setActiveTab('routine')}
                   >
-                    Mi rutina
+                    {t('nav.routine')}
                   </button>
                   <button
                     type="button"
@@ -125,7 +127,7 @@ function App() {
                     className={activeTab === 'catalog' ? 'tab-btn tab-btn--active' : 'tab-btn'}
                     onClick={(): void => setActiveTab('catalog')}
                   >
-                    Catalogo
+                    {t('nav.catalog')}
                   </button>
                   <button
                     type="button"
@@ -134,7 +136,7 @@ function App() {
                     className={activeTab === 'report' ? 'tab-btn tab-btn--active' : 'tab-btn'}
                     onClick={(): void => setActiveTab('report')}
                   >
-                    Reporte
+                    {t('nav.report')}
                   </button>
                   <button
                     type="button"
@@ -143,7 +145,7 @@ function App() {
                     className={activeTab === 'instructor' ? 'tab-btn tab-btn--active' : 'tab-btn'}
                     onClick={(): void => setActiveTab('instructor')}
                   >
-                    Instructor
+                    {t('nav.instructor')}
                   </button>
                 </div>
 
@@ -172,7 +174,7 @@ function App() {
                       </>
                     ) : (
                       <div className="empty-state">
-                        <p>Agrega tu primer ejercicio para ver las estadisticas</p>
+                        <p>{t('dashboard.emptyExercise')}</p>
                       </div>
                     )
                   )}

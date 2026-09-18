@@ -6,6 +6,7 @@ import { calcPace, calcCalories } from "../../../utils/calculations";
 import { useUserStore } from "../../../store/userStore";
 import React from "react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import "../Profile/ProfileForm.css";
 
 const DAYS: DayOfWeek[] = [
@@ -18,6 +19,7 @@ const isExerciseCategory = (value: string): value is ExerciseCategory =>
   CATEGORIES.some((category: ExerciseCategory): boolean => category === value);
 
 export const ExerciseForm = ({ onExerciseAdded }: ExerciseFormProps): React.JSX.Element => {
+  const { t } = useTranslation();
   const [category, setCategory] = useState<ExerciseCategory | "">("");
   const { register, handleSubmit, formState: { errors }, reset } = useForm<FlatExerciseFormInput>();
   const { addExercise } = useUserStore();
@@ -39,7 +41,7 @@ export const ExerciseForm = ({ onExerciseAdded }: ExerciseFormProps): React.JSX.
     switch (data.category) {
       case "Cardio": {
         if (data.distanceKm == null || data.heartRateZone == null) {
-          throw new Error("Faltan campos requeridos para Cardio");
+          throw new Error(t("errors.missingCardio"));
         }
         exercise = {
           id: crypto.randomUUID(),
@@ -58,7 +60,7 @@ export const ExerciseForm = ({ onExerciseAdded }: ExerciseFormProps): React.JSX.
       }
       case "Strength": {
         if (data.sets == null || data.weight == null || data.repetitions == null) {
-          throw new Error("Faltan campos requeridos para Strength");
+          throw new Error(t("errors.missingStrength"));
         }
         exercise = {
           id: crypto.randomUUID(),
@@ -76,7 +78,7 @@ export const ExerciseForm = ({ onExerciseAdded }: ExerciseFormProps): React.JSX.
       }
       case "Flexibility": {
         if (data.poses == null) {
-          throw new Error("Faltan campos requeridos para Flexibility");
+          throw new Error(t("errors.missingFlexibility"));
         }
         exercise = {
           id: crypto.randomUUID(),
@@ -93,7 +95,7 @@ export const ExerciseForm = ({ onExerciseAdded }: ExerciseFormProps): React.JSX.
       }
       default: {
         const _exhaustive: never = data.category;
-        throw new Error(`Categoría no soportada: ${_exhaustive}`);
+        throw new Error(t("errors.unsupportedCategory", { category: _exhaustive }));
       }
     }
 
@@ -105,28 +107,28 @@ export const ExerciseForm = ({ onExerciseAdded }: ExerciseFormProps): React.JSX.
 
   return (
     <form className="form-container" onSubmit={handleSubmit(onSubmit)}>
-      <h2>Agregar ejercicio</h2>
+      <h2>{t("form.addExercise")}</h2>
 
       <div className="form-group">
-        <label>Día</label>
-        <select {...register("day", { required: "Este campo es requerido" })}>
-          <option value="">Seleccionar día...</option>
+        <label>{t("form.day")}</label>
+        <select {...register("day", { required: t("validation.required") })}>
+          <option value="">{t("form.selectDay")}</option>
           {DAYS.map((day: DayOfWeek) => (
-            <option key={day} value={day}>{day}</option>
+            <option key={day} value={day}>{t(`days.${day}`)}</option>
           ))}
         </select>
         {errors.day && <span className="error">{errors.day.message}</span>}
       </div>
 
       <div className="form-group">
-        <label>Categoría</label>
+        <label>{t("form.category")}</label>
         <select
           {...register("category", {
-            required: "Este campo es requerido",
+            required: t("validation.required"),
             onChange: handleCategoryChange,
           })}
         >
-          <option value="">Seleccionar categoría...</option>
+          <option value="">{t("form.selectCategory")}</option>
           {CATEGORIES.map((cat: ExerciseCategory) => (
             <option key={cat} value={cat}>{cat}</option>
           ))}
@@ -135,39 +137,39 @@ export const ExerciseForm = ({ onExerciseAdded }: ExerciseFormProps): React.JSX.
       </div>
 
       <div className="form-group">
-        <label>Nombre del ejercicio</label>
+        <label>{t("form.exerciseName")}</label>
         <input
-          {...register("exerciseName", { required: "Este campo es requerido" })}
-          placeholder="ej. Running, Swimming, Squats"
+          {...register("exerciseName", { required: t("validation.required") })}
+          placeholder={t("form.placeholderName")}
         />
         {errors.exerciseName && <span className="error">{errors.exerciseName.message}</span>}
       </div>
 
       <div className="form-group">
-        <label>Duración (minutos)</label>
+        <label>{t("form.duration")}</label>
         <input
           type="number"
           {...register("durationMinutes", {
-            required: "Este campo es requerido",
+            required: t("validation.required"),
             valueAsNumber: true,
-            min: { value: 1, message: "Mínimo 1 minuto" },
+            min: { value: 1, message: t("validation.minMinute") },
           })}
-          placeholder="ej. 30"
+          placeholder="30"
         />
         {errors.durationMinutes && <span className="error">{errors.durationMinutes.message}</span>}
       </div>
 
       <div className="form-group">
-        <label>Calorías por minuto</label>
+        <label>{t("form.caloriesPerMinute")}</label>
         <input
           type="number"
           step="0.1"
           {...register("caloriesPerMinute", {
-            required: "Este campo es requerido",
+            required: t("validation.required"),
             valueAsNumber: true,
-            min: { value: 0.1, message: "Debe ser mayor a 0" },
+            min: { value: 0.1, message: t("validation.positive") },
           })}
-          placeholder="ej. 8.5"
+          placeholder="8.5"
         />
         {errors.caloriesPerMinute && <span className="error">{errors.caloriesPerMinute.message}</span>}
       </div>
@@ -175,7 +177,7 @@ export const ExerciseForm = ({ onExerciseAdded }: ExerciseFormProps): React.JSX.
       {category === "Cardio" && (
         <>
           <div className="form-group">
-            <label>Distancia (km)</label>
+            <label>{t("form.distance")}</label>
             <input
               type="number"
               step="0.1"
@@ -184,19 +186,19 @@ export const ExerciseForm = ({ onExerciseAdded }: ExerciseFormProps): React.JSX.
                 validate: (val) =>
                   category !== "Cardio" || (val != null && val > 0) || "Requerido para Cardio",
               })}
-              placeholder="ej. 5.2"
+              placeholder="5.2"
             />
             {errors.distanceKm && <span className="error">{errors.distanceKm.message}</span>}
           </div>
 
           <div className="form-group">
-            <label>Zona de frecuencia cardíaca</label>
+            <label>{t("form.heartRateZone")}</label>
             <input
               {...register("heartRateZone", {
                 validate: (val) =>
                   category !== "Cardio" || (val != null && val.trim() !== "") || "Requerido para Cardio",
               })}
-              placeholder="ej. Zona 2, Aeróbica"
+              placeholder="Zone 2, Aerobic"
             />
             {errors.heartRateZone && <span className="error">{errors.heartRateZone.message}</span>}
           </div>
@@ -206,7 +208,7 @@ export const ExerciseForm = ({ onExerciseAdded }: ExerciseFormProps): React.JSX.
       {category === "Strength" && (
         <>
           <div className="form-group">
-            <label>Series</label>
+            <label>{t("form.sets")}</label>
             <input
               type="number"
               {...register("sets", {
@@ -214,13 +216,13 @@ export const ExerciseForm = ({ onExerciseAdded }: ExerciseFormProps): React.JSX.
                 validate: (val) =>
                   category !== "Strength" || (val != null && val > 0) || "Requerido para Strength",
               })}
-              placeholder="ej. 3"
+              placeholder="3"
             />
             {errors.sets && <span className="error">{errors.sets.message}</span>}
           </div>
 
           <div className="form-group">
-            <label>Peso (kg)</label>
+            <label>{t("form.weight")}</label>
             <input
               type="number"
               step="0.1"
@@ -229,13 +231,13 @@ export const ExerciseForm = ({ onExerciseAdded }: ExerciseFormProps): React.JSX.
                 validate: (val) =>
                   category !== "Strength" || (val != null && val > 0) || "Requerido para Strength",
               })}
-              placeholder="ej. 60"
+              placeholder="60"
             />
             {errors.weight && <span className="error">{errors.weight.message}</span>}
           </div>
 
           <div className="form-group">
-            <label>Repeticiones</label>
+            <label>{t("form.repetitions")}</label>
             <input
               type="number"
               {...register("repetitions", {
@@ -243,7 +245,7 @@ export const ExerciseForm = ({ onExerciseAdded }: ExerciseFormProps): React.JSX.
                 validate: (val) =>
                   category !== "Strength" || (val != null && val > 0) || "Requerido para Strength",
               })}
-              placeholder="ej. 10"
+              placeholder="10"
             />
             {errors.repetitions && <span className="error">{errors.repetitions.message}</span>}
           </div>
@@ -253,7 +255,7 @@ export const ExerciseForm = ({ onExerciseAdded }: ExerciseFormProps): React.JSX.
       {category === "Flexibility" && (
         <>
           <div className="form-group">
-            <label>Posturas</label>
+            <label>{t("form.poses")}</label>
             <input
               type="number"
               {...register("poses", {
@@ -261,28 +263,28 @@ export const ExerciseForm = ({ onExerciseAdded }: ExerciseFormProps): React.JSX.
                 validate: (val) =>
                   category !== "Flexibility" || (val != null && val > 0) || "Requerido para Flexibility",
               })}
-              placeholder="ej. 5"
+              placeholder="5"
             />
             {errors.poses && <span className="error">{errors.poses.message}</span>}
           </div>
 
           <div className="form-group">
-            <label>Comentario (opcional)</label>
-            <input {...register("comments")} placeholder="ej. Me costó mantener el equilibrio" />
+            <label>{t("form.optionalComment")}</label>
+            <input {...register("comments")} placeholder={t("form.placeholderComment")} />
           </div>
         </>
       )}
 
       <div className="form-group">
-        <label>Estado</label>
+        <label>{t("form.status")}</label>
         <select {...register("status")} defaultValue="pending">
-          <option value="pending">Pendiente</option>
-          <option value="completed">Completado</option>
-          <option value="skipped">Saltado</option>
+          <option value="pending">{t("statuses.pending")}</option>
+          <option value="completed">{t("statuses.completed")}</option>
+          <option value="skipped">{t("statuses.skipped")}</option>
         </select>
       </div>
 
-      <button type="submit" className="submit-btn">Agregar ejercicio</button>
+      <button type="submit" className="submit-btn">{t("form.add")}</button>
     </form>
   );
 };

@@ -6,6 +6,7 @@ import { searchExercisesByMuscle, ExerciseApiError } from "../../services/exerci
 import { validateExternalExercise } from "../../utils/calculations";
 import { useUserStore } from "../../store/userStore";
 import "./ExerciseSearch.css";
+import { useTranslation } from "react-i18next";
 
 const MUSCLE_GROUPS: MuscleGroup[] = [
   "abdominals", "abductors", "adductors", "biceps", "calves", "chest",
@@ -20,6 +21,7 @@ const DAYS: DayOfWeek[] = [
 type SearchStatus = "idle" | "loading" | "success" | "error";
 
 export const ExerciseSearch = ({ localCatalogCount }: ExerciseSearchProps): React.JSX.Element => {
+  const { t } = useTranslation();
   const { addExercise, setIncompleteExternalExercises } = useUserStore();
   const [muscle, setMuscle] = useState<MuscleGroup>("chest");
   const [day, setDay] = useState<DayOfWeek>("Monday");
@@ -47,7 +49,7 @@ export const ExerciseSearch = ({ localCatalogCount }: ExerciseSearchProps): Reac
     } catch (error) {
       const message = error instanceof ExerciseApiError
         ? error.message
-        : "Ocurrió un error inesperado al buscar ejercicios.";
+        : t("search.errorFallback");
       setErrorMessage(message);
       setResults([]);
       setIncompleteExternalExercises([]);
@@ -64,11 +66,11 @@ export const ExerciseSearch = ({ localCatalogCount }: ExerciseSearchProps): Reac
 
   return (
     <div className="exercise-search">
-      <h2>Buscar ejercicios</h2>
+      <h2>{t("search.title")}</h2>
 
       <div className="exercise-search-controls">
         <div className="form-group">
-          <label>Grupo muscular</label>
+          <label>{t("search.muscle")}</label>
           <select value={muscle} onChange={(e: React.ChangeEvent<HTMLSelectElement>): void => {
             const value = e.target.value;
             const match = MUSCLE_GROUPS.find((group: MuscleGroup): boolean => group === value);
@@ -81,7 +83,7 @@ export const ExerciseSearch = ({ localCatalogCount }: ExerciseSearchProps): Reac
         </div>
 
         <div className="form-group">
-          <label>Día para agregar</label>
+          <label>{t("search.dayToAdd")}</label>
           <select value={day} onChange={(e: React.ChangeEvent<HTMLSelectElement>): void => {
             const value = e.target.value;
             const match = DAYS.find((d: DayOfWeek): boolean => d === value);
@@ -94,35 +96,35 @@ export const ExerciseSearch = ({ localCatalogCount }: ExerciseSearchProps): Reac
         </div>
 
         <button type="button" className="submit-btn" onClick={(): void => { void handleSearch(); }} disabled={status === "loading"}>
-          {status === "loading" ? "Buscando..." : "Buscar"}
+          {status === "loading" ? t("common.searching") : t("common.search")}
         </button>
       </div>
 
       {status === "error" && (
-        <p className="exercise-search-error">{errorMessage} — el catálogo local sigue disponible normalmente.</p>
+        <p className="exercise-search-error">{errorMessage} — {t("search.errorSuffix")}.</p>
       )}
 
       {status === "success" && (
         <div className="exercise-search-results">
-          <h3>Resultados de búsqueda, muscle: {muscle}</h3>
+          <h3>{t("search.results", { muscle })}</h3>
 
           <div className="exercise-search-group">
-            <h4>Válidos ({accepted.length})</h4>
+            <h4>{t("search.valid")} ({accepted.length})</h4>
             {accepted.length === 0 ? (
-              <p className="category-empty">Sin resultados válidos para este grupo muscular.</p>
+              <p className="category-empty">{t("search.noValid")}</p>
             ) : (
               accepted.map((result: ExternalExerciseValidation, index: number) => {
                 const isAdded = result.exercise !== null && addedIds.has(result.exercise.id);
                 return (
                   <div key={index} className="exercise-search-row">
-                    <span>{result.raw.name} · {result.exercise?.type} {isAdded ? "| agregado" : ""}</span>
+                    <span>{result.raw.name} · {result.exercise?.type} {isAdded ? `| ${t("common.added")}` : ""}</span>
                     <button
                       type="button"
                       className="submit-btn submit-btn--small add-btn"
                       disabled={isAdded}
                       onClick={(): void => handleAdd(result)}
                     >
-                      {isAdded ? "Agregado" : "Agregar al catálogo"}
+                      {isAdded ? t("common.added") : t("common.addToCatalog")}
                     </button>
                   </div>
                 );
@@ -131,16 +133,16 @@ export const ExerciseSearch = ({ localCatalogCount }: ExerciseSearchProps): Reac
           </div>
 
           <div className="exercise-search-group">
-            <h4>Datos incompletos ({incomplete.length})</h4>
+            <h4>{t("search.incomplete")} ({incomplete.length})</h4>
             {incomplete.map((result: ExternalExerciseValidation, index: number) => (
               <div key={index} className="exercise-search-row exercise-search-row--incomplete">
-                <span>{result.raw.name || "(sin nombre)"} · faltan: {result.missingFields.join(", ")}</span>
+                <span>{result.raw.name || t("common.noName")} · {t("search.missing")} {result.missingFields.join(", ")}</span>
               </div>
             ))}
           </div>
 
           <p className="exercise-search-summary">
-            Catálogo local: {localCatalogCount} ejercicios | Desde API: {addedFromApiCount} ejercicios
+            {t("search.catalogSummary", { local: localCatalogCount, api: addedFromApiCount })}
           </p>
         </div>
       )}

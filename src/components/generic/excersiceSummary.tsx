@@ -7,8 +7,10 @@ import {
   calcAvgCaloriesPerDay,
   formatDuration,
 } from "../../utils/calculations";
+import { useTranslation } from "react-i18next";
 
 const ExerciseList = ({ entries }: ExerciseListProps) => {
+  const { t } = useTranslation();
   if (entries.length === 0) return null;
 
   const totalCalories = calcTotalCalories(entries);
@@ -16,7 +18,7 @@ const ExerciseList = ({ entries }: ExerciseListProps) => {
 
   return (
     <div className="exercise-list">
-      <h2>Ejercicios registrados</h2>
+      <h2>{t("summary.registered")}</h2>
       <div className="exercise-table">
         {entries.map((entry: RoutineEntry, index: number) => {
           const calories = calcCalories(
@@ -31,26 +33,26 @@ const ExerciseList = ({ entries }: ExerciseListProps) => {
           return (
             <div key={index} className="exercise-row">
               <span className="exercise-name">{entry.exercise.name}</span>
-              <span className="exercise-day">{entry.day}</span>
+              <span className="exercise-day">{t(`days.${entry.day}`)}</span>
               <span className="exercise-duration">
                 {formatDuration(entry.exercise.durationMinutes)}
               </span>
               
               <span className="exercise-pace">
                 {entry.exercise.type === "Cardio"
-                  ? `Ritmo: ${calcPace(entry.exercise.durationMinutes, entry.exercise.distanceKm)} min/km`
+                  ? `${t("descriptions.pace")} ${calcPace(entry.exercise.durationMinutes, entry.exercise.distanceKm)} min/km`
                   : "—"}
               </span>
 
-              <span className="exercise-calories">{calories} cal</span>
+              <span className="exercise-calories">{calories} {t("common.cal")}</span>
               <span className="exercise-percentage">{percentage}%</span>
             </div>
           );
         })}
       </div>
       <div className="exercise-totals">
-        <span>Total: <strong>{totalCalories} cal</strong></span>
-        <span>Promedio por día: <strong>{avgCalories} cal</strong></span>
+        <span>{t("summary.totalCalories")} <strong>{totalCalories} {t("common.cal")}</strong></span>
+        <span>{t("summary.average")} <strong>{avgCalories} {t("common.cal")}</strong></span>
       </div>
     </div>
   );

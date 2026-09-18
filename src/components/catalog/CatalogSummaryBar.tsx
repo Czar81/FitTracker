@@ -1,8 +1,10 @@
 import React from "react";
 import type { CatalogSummaryBarProps } from "../../types/forms";
 import { formatDuration } from "../../utils/calculations";
+import { useTranslation } from "react-i18next";
 
 export const CatalogSummaryBar = ({ summary }: CatalogSummaryBarProps): React.JSX.Element => {
+  const { t } = useTranslation();
   const { cardio, strength, flexibility } = summary;
 
   const totalExercises =
@@ -14,19 +16,19 @@ export const CatalogSummaryBar = ({ summary }: CatalogSummaryBarProps): React.JS
   return (
     <div className="catalog-summary-bar">
       <div className="catalog-summary-item">
-        <span className="catalog-summary-label">Ejercicios</span>
+        <span className="catalog-summary-label">{t("catalog.summaryExercises")}</span>
         <span className="catalog-summary-value">{totalExercises}</span>
       </div>
       <div className="catalog-summary-item">
-        <span className="catalog-summary-label">Duración total</span>
+        <span className="catalog-summary-label">{t("catalog.summaryDuration")}</span>
         <span className="catalog-summary-value">{formatDuration(totalMinutes)}</span>
       </div>
       <div className="catalog-summary-item">
-        <span className="catalog-summary-label">Calorías totales</span>
+        <span className="catalog-summary-label">{t("catalog.summaryCalories")}</span>
         <span className="catalog-summary-value">{totalCalories} cal</span>
       </div>
       <div className="catalog-summary-item">
-        <span className="catalog-summary-label">Bonus</span>
+        <span className="catalog-summary-label">{t("common.bonus")}</span>
         <span className="catalog-summary-value">{totalBonus}</span>
       </div>
     </div>

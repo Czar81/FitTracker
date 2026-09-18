@@ -3,9 +3,11 @@ import React from "react";
 import type { UserProfile } from "../../../types/models";
 import type { ProfileFormInput } from "../../../types/forms";
 import { useUserStore } from "../../../store/userStore";
+import { useTranslation } from "react-i18next";
 import "./ProfileForm.css";
 
 export const ProfileForm = (): React.JSX.Element => {
+  const { t } = useTranslation();
   const { register, handleSubmit, formState: { errors } } = useForm<ProfileFormInput>();
   const { setProfile } = useUserStore();
 
@@ -18,7 +20,7 @@ export const ProfileForm = (): React.JSX.Element => {
       experienceLevel: data.experienceLevel,
       assignedRoutine: {
         id: crypto.randomUUID(),
-        name: "Mi rutina semanal",
+        name: t("profile.weeklyRoutine"),
         startDate: new Date().toISOString().split("T")[0],
         sessions: [],
       },
@@ -31,65 +33,65 @@ export const ProfileForm = (): React.JSX.Element => {
 
   return (
     <form className="form-container" onSubmit={handleSubmit(onSubmit)}>
-      <h2>Configurar perfil</h2>
+      <h2>{t("profile.title")}</h2>
 
       <div className="form-group">
-        <label>Nombre</label>
+        <label>{t("profile.name")}</label>
         <input
-          {...register("name", { required: "Este campo es requerido" })}
-          placeholder="Tu nombre"
+          {...register("name", { required: t("validation.required") })}
+          placeholder={t("profile.name")}
         />
         {errors.name && <span className="error">{errors.name.message}</span>}
       </div>
 
       <div className="form-group">
-        <label>Edad</label>
+        <label>{t("profile.age")}</label>
         <input
           type="number"
-          placeholder="Tu edad"
+          placeholder={t("profile.age")}
           {...register("age", {
-            required: "Este campo es requerido",
+            required: t("validation.required"),
             valueAsNumber: true,
-            min: { value: 0, message: "No puede ser negativa" },
-            max: { value: 150, message: "Edad inválida" },
+            min: { value: 0, message: t("validation.negative") },
+            max: { value: 150, message: t("validation.invalidAge") },
           })}
         />
         {errors.age && <span className="error">{errors.age.message}</span>}
       </div>
 
       <div className="form-group">
-        <label>Email</label>
+        <label>{t("profile.email")}</label>
         <input
           type="email"
-          {...register("email", { required: "Este campo es requerido" })}
-          placeholder="tu@email.com"
+          {...register("email", { required: t("validation.required") })}
+          placeholder="you@email.com"
         />
         {errors.email && <span className="error">{errors.email.message}</span>}
       </div>
 
       <div className="form-group">
-        <label>Nivel de experiencia</label>
-        <select {...register("experienceLevel", { required: "Este campo es requerido" })}>
-          <option value="">Seleccionar...</option>
-          <option value="Beginner">Beginner</option>
-          <option value="Intermediate">Intermediate</option>
-          <option value="Advanced">Advanced</option>
+        <label>{t("profile.experience")}</label>
+        <select {...register("experienceLevel", { required: t("validation.required") })}>
+          <option value="">{t("form.selectCategory")}</option>
+          <option value="Beginner">{t("levels.Beginner")}</option>
+          <option value="Intermediate">{t("levels.Intermediate")}</option>
+          <option value="Advanced">{t("levels.Advanced")}</option>
         </select>
         {errors.experienceLevel && <span className="error">{errors.experienceLevel.message}</span>}
       </div>
 
       <div className="form-group">
-        <label>Plan de membresía</label>
-        <select {...register("membershipLevel", { required: "Este campo es requerido" })}>
-          <option value="">Seleccionar...</option>
-          <option value="Free">Free</option>
-          <option value="Premium">Premium</option>
-          <option value="Elite">Elite</option>
+        <label>{t("profile.plan")}</label>
+        <select {...register("membershipLevel", { required: t("validation.required") })}>
+          <option value="">{t("form.selectCategory")}</option>
+          <option value="Free">{t("levels.Free")}</option>
+          <option value="Premium">{t("levels.Premium")}</option>
+          <option value="Elite">{t("levels.Elite")}</option>
         </select>
         {errors.membershipLevel && <span className="error">{errors.membershipLevel.message}</span>}
       </div>
 
-      <button type="submit" className="submit-btn">Guardar perfil</button>
+      <button type="submit" className="submit-btn">{t("profile.save")}</button>
     </form>
   );
 };

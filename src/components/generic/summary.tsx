@@ -1,8 +1,10 @@
 import type { RoutineEntry } from "../../types/models";
 import type { SummaryProps } from "../../types/forms";
 import { calcCalories, calcTotalCalories, findBestCalorieDay } from "../../utils/calculations";
+import { useTranslation } from "react-i18next";
 
 const Summary = ({ entries }: SummaryProps) => {
+  const { t } = useTranslation();
   if (entries.length === 0) return null;
 
   const totalCalories = calcTotalCalories(entries);
@@ -22,24 +24,24 @@ const Summary = ({ entries }: SummaryProps) => {
 
   return (
     <div className="summary-box">
-      <h2>Resumen comparativo</h2>
+      <h2>{t("summary.title")}</h2>
       <div className="summary-row">
-        <span className="summary-label">Total de calorías:</span>
+        <span className="summary-label">{t("summary.totalCalories")}</span>
         <span className="summary-value">
-          <strong>{totalCalories} cal</strong>
+          <strong>{totalCalories} {t("common.cal")}</strong>
         </span>
       </div>
       <div className="summary-row">
-        <span className="summary-label">Mayor duración:</span>
+        <span className="summary-label">{t("summary.longest")}</span>
         <span className="summary-value">
           {longestExercise.exercise.name} ({longestExercise.exercise.durationMinutes} min)
         </span>
       </div>
       {bestDay != null && (
         <div className="summary-row">
-          <span className="summary-label">Mejor día:</span>
+          <span className="summary-label">{t("summary.bestDay")}</span>
           <span className="summary-value">
-            {bestDay} ({bestDayCalories.toFixed(0)} cal)
+            {t(`days.${bestDay}`)} ({bestDayCalories.toFixed(0)} {t("common.cal")})
           </span>
         </div>
       )}

@@ -4,6 +4,7 @@ import type { WorkoutStatus } from "../../types/enums";
 import type { CategoryBlockProps } from "../../types/forms";
 import { generateExerciseDescription } from "../../utils/descriptions";
 import { calcCalories, formatDuration } from "../../utils/calculations";
+import { useTranslation } from "react-i18next";
 
 const STATUS_ICON: Record<WorkoutStatus, string> = {
   pending: "⏳",
@@ -12,17 +13,18 @@ const STATUS_ICON: Record<WorkoutStatus, string> = {
 };
 
 export const CategoryBlock = ({ group, label }: CategoryBlockProps): React.JSX.Element => {
+  const { t } = useTranslation();
   return (
     <div className="category-block">
       <div className="category-header">
         <h3>{label}</h3>
         <span className="category-count">
-          {group.entries.length} ejercicios · {formatDuration(group.totalMinutes)} · {group.totalCalories.toFixed(0)} kcal
+          {t("catalog.count", { count: group.entries.length, duration: formatDuration(group.totalMinutes), calories: group.totalCalories.toFixed(0) })}
         </span>
       </div>
 
       {group.entries.length === 0 ? (
-        <p className="category-empty">Sin ejercicios en esta categoría</p>
+        <p className="category-empty">{t("catalog.empty")}</p>
       ) : (
         <div className="category-exercises">
           {group.entries.map((entry: RoutineEntry, index: number) => {
@@ -40,7 +42,7 @@ export const CategoryBlock = ({ group, label }: CategoryBlockProps): React.JSX.E
 
       {group.bonusCount > 0 && (
         <div className="category-footer">
-          <span>{group.bonusCount} bonus</span>
+          <span>{t("catalog.bonusCount", { count: group.bonusCount })}</span>
         </div>
       )}
     </div>
