@@ -1,0 +1,177 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "workspace": "My workspace",
+    "routine": "My routine",
+    "catalog": "Catalog",
+    "report": "Report",
+    "instructor": "Instructor",
+    "workspaceSections": "My workspace sections"
+  },
+  "profile": {
+    "title": "Set up profile",
+    "name": "Name",
+    "age": "Age",
+    "email": "Email",
+    "level": "Level",
+    "experience": "Experience level",
+    "membership": "Membership",
+    "plan": "Membership plan",
+    "since": "Since",
+    "status": "Status",
+    "active": "Active",
+    "inactive": "Inactive",
+    "save": "Save profile",
+    "weeklyRoutine": "My weekly routine"
+  },
+  "form": {
+    "addExercise": "Add exercise",
+    "day": "Day",
+    "selectDay": "Select a day...",
+    "category": "Category",
+    "selectCategory": "Select a category...",
+    "exerciseName": "Exercise name",
+    "duration": "Duration (minutes)",
+    "caloriesPerMinute": "Calories per minute",
+    "distance": "Distance (km)",
+    "heartRateZone": "Heart rate zone",
+    "sets": "Sets",
+    "weight": "Weight (kg)",
+    "repetitions": "Repetitions",
+    "poses": "Poses",
+    "optionalComment": "Comment (optional)",
+    "status": "Status",
+    "add": "Add exercise",
+    "placeholderName": "e.g. Running, Swimming, Squats",
+    "placeholderComment": "e.g. It was difficult to keep my balance"
+  },
+  "validation": {
+    "required": "This field is required",
+    "minMinute": "Minimum 1 minute",
+    "positive": "Must be greater than 0",
+    "requiredFor": "Required for {{category}}",
+    "negative": "Cannot be negative",
+    "invalidAge": "Invalid age"
+  },
+  "common": {
+    "exercises": "exercises",
+    "exercise": "Exercise",
+    "duration": "Total duration",
+    "calories": "Total calories",
+    "bonus": "Bonus",
+    "minutes": "min",
+    "cal": "cal",
+    "local": "local",
+    "fromApi": "from API",
+    "noExercises": "No exercises in this category",
+    "noActivity": "There is no activity recorded yet",
+    "rest": "(rest)",
+    "noName": "(unnamed)",
+    "search": "Search",
+    "searching": "Searching...",
+    "addToCatalog": "Add to catalog",
+    "added": "Added"
+  },
+  "categories": {
+    "Cardio": "Cardio",
+    "Strength": "Strength",
+    "Flexibility": "Flexibility"
+  },
+  "days": {
+    "Monday": "Monday",
+    "Tuesday": "Tuesday",
+    "Wednesday": "Wednesday",
+    "Thursday": "Thursday",
+    "Friday": "Friday",
+    "Saturday": "Saturday",
+    "Sunday": "Sunday"
+  },
+  "statuses": {
+    "pending": "Pending",
+    "completed": "Completed",
+    "skipped": "Skipped"
+  },
+  "levels": {
+    "Beginner": "Beginner",
+    "Intermediate": "Intermediate",
+    "Advanced": "Advanced",
+    "Free": "Free",
+    "Premium": "Premium",
+    "Elite": "Elite"
+  },
+  "dashboard": {
+    "title": "FitTracker Dashboard",
+    "system": "System status",
+    "users": "Users",
+    "activeRoutines": "Active routines",
+    "catalog": "Catalog",
+    "goTo": "Go to",
+    "unifiedReport": "Unified report",
+    "instructorView": "Instructor view",
+    "recentActivity": "Recent activity",
+    "emptyExercise": "Add your first exercise to see the statistics",
+    "routineSummary": "{{routine}}, {{days}} days | {{minutes}} min | {{calories}} kcal",
+    "recommendation": {
+      "high": "You are training many days or minutes this week. Consider adding a rest day.",
+      "low": "Consider adding one more training day this week.",
+      "ok": "Your weekly load is balanced."
+    }
+  },
+  "catalog": {
+    "title": "Exercise catalog",
+    "summaryExercises": "Exercises",
+    "summaryDuration": "Total duration",
+    "summaryCalories": "Total calories",
+    "empty": "No exercises in this category",
+    "count": "{{count}} exercises · {{duration}} · {{calories}} kcal",
+    "bonusCount": "{{count}} bonus"
+  },
+  "report": {
+    "title": "Unified report",
+    "localExercises": "local",
+    "apiExercises": "from API",
+    "incomplete": "Incomplete data",
+    "noRejected": "There are no rejected exercises.",
+    "missing": "missing:"
+  },
+  "routine": {
+    "startDate": "Week from:",
+    "load": "Weekly load",
+    "bestDay": "Highest calorie-burn day:",
+    "pending": "Pending exercises",
+    "comment": "💬 Day comment..."
+  },
+  "search": {
+    "title": "Search exercises",
+    "muscle": "Muscle group",
+    "dayToAdd": "Day to add",
+    "results": "Search results, muscle: {{muscle}}",
+    "valid": "Valid",
+    "incomplete": "Incomplete data",
+    "noValid": "No valid results for this muscle group.",
+    "errorFallback": "An unexpected error occurred while searching.",
+    "errorSuffix": "the local catalog remains available",
+    "catalogSummary": "Local catalog: {{local}} exercises | From API: {{api}} exercises",
+    "missing": "missing:"
+  },
+  "summary": {
+    "title": "Comparative summary",
+    "totalCalories": "Total calories:",
+    "longest": "Longest duration:",
+    "bestDay": "Best day:",
+    "registered": "Registered exercises",
+    "average": "Average per day:"
+  },
+  "errors": {
+    "missingCardio": "Required fields are missing for Cardio",
+    "missingStrength": "Required fields are missing for Strength",
+    "missingFlexibility": "Required fields are missing for Flexibility",
+    "unsupportedCategory": "Unsupported category: {{category}}"
+  },
+  "descriptions": {
+    "pace": "Pace:",
+    "series": "sets",
+    "reps": "reps",
+    "poses": "poses"
+  }
+}

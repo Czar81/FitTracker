@@ -1,0 +1,177 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "workspace": "Mi espacio",
+    "routine": "Mi rutina",
+    "catalog": "Catálogo",
+    "report": "Reporte",
+    "instructor": "Instructor",
+    "workspaceSections": "Secciones de Mi espacio"
+  },
+  "profile": {
+    "title": "Configurar perfil",
+    "name": "Nombre",
+    "age": "Edad",
+    "email": "Email",
+    "level": "Nivel",
+    "experience": "Nivel de experiencia",
+    "membership": "Membresía",
+    "plan": "Plan de membresía",
+    "since": "Desde",
+    "status": "Estado",
+    "active": "Activo",
+    "inactive": "Inactivo",
+    "save": "Guardar perfil",
+    "weeklyRoutine": "Mi rutina semanal"
+  },
+  "form": {
+    "addExercise": "Agregar ejercicio",
+    "day": "Día",
+    "selectDay": "Seleccionar día...",
+    "category": "Categoría",
+    "selectCategory": "Seleccionar categoría...",
+    "exerciseName": "Nombre del ejercicio",
+    "duration": "Duración (minutos)",
+    "caloriesPerMinute": "Calorías por minuto",
+    "distance": "Distancia (km)",
+    "heartRateZone": "Zona de frecuencia cardíaca",
+    "sets": "Series",
+    "weight": "Peso (kg)",
+    "repetitions": "Repeticiones",
+    "poses": "Posturas",
+    "optionalComment": "Comentario (opcional)",
+    "status": "Estado",
+    "add": "Agregar ejercicio",
+    "placeholderName": "ej. Running, Swimming, Squats",
+    "placeholderComment": "ej. Me costó mantener el equilibrio"
+  },
+  "validation": {
+    "required": "Este campo es requerido",
+    "minMinute": "Mínimo 1 minuto",
+    "positive": "Debe ser mayor a 0",
+    "requiredFor": "Requerido para {{category}}",
+    "negative": "No puede ser negativa",
+    "invalidAge": "Edad inválida"
+  },
+  "common": {
+    "exercises": "ejercicios",
+    "exercise": "Ejercicio",
+    "duration": "Duración total",
+    "calories": "Calorías totales",
+    "bonus": "Bonus",
+    "minutes": "min",
+    "cal": "cal",
+    "local": "locales",
+    "fromApi": "desde API",
+    "noExercises": "Sin ejercicios en esta categoría",
+    "noActivity": "Todavía no hay actividad registrada.",
+    "rest": "(descanso)",
+    "noName": "(sin nombre)",
+    "search": "Buscar",
+    "searching": "Buscando...",
+    "addToCatalog": "Agregar al catálogo",
+    "added": "Agregado"
+  },
+  "categories": {
+    "Cardio": "Cardio",
+    "Strength": "Fuerza",
+    "Flexibility": "Flexibilidad"
+  },
+  "days": {
+    "Monday": "Lunes",
+    "Tuesday": "Martes",
+    "Wednesday": "Miércoles",
+    "Thursday": "Jueves",
+    "Friday": "Viernes",
+    "Saturday": "Sábado",
+    "Sunday": "Domingo"
+  },
+  "statuses": {
+    "pending": "Pendiente",
+    "completed": "Completado",
+    "skipped": "Saltado"
+  },
+  "levels": {
+    "Beginner": "Principiante",
+    "Intermediate": "Intermedio",
+    "Advanced": "Avanzado",
+    "Free": "Gratis",
+    "Premium": "Premium",
+    "Elite": "Elite"
+  },
+  "dashboard": {
+    "title": "Dashboard de FitTracker",
+    "system": "Estado del sistema",
+    "users": "Usuarios",
+    "activeRoutines": "Rutinas activas",
+    "catalog": "Catálogo",
+    "goTo": "Ir a",
+    "unifiedReport": "Reporte unificado",
+    "instructorView": "Vista de instructor",
+    "recentActivity": "Actividad reciente",
+    "emptyExercise": "Agrega tu primer ejercicio para ver las estadísticas",
+    "routineSummary": "{{routine}}, {{days}} días | {{minutes}} min | {{calories}} kcal",
+    "recommendation": {
+      "high": "Estás entrenando muchos días o minutos esta semana. Considerá agregar un día de descanso.",
+      "low": "Considerá agregar un día más de entrenamiento esta semana.",
+      "ok": "Tu carga semanal está balanceada."
+    }
+  },
+  "catalog": {
+    "title": "Catálogo de ejercicios",
+    "summaryExercises": "Ejercicios",
+    "summaryDuration": "Duración total",
+    "summaryCalories": "Calorías totales",
+    "empty": "Sin ejercicios en esta categoría",
+    "count": "{{count}} ejercicios · {{duration}} · {{calories}} kcal",
+    "bonusCount": "{{count}} bonus"
+  },
+  "report": {
+    "title": "Reporte unificado",
+    "localExercises": "locales",
+    "apiExercises": "desde API",
+    "incomplete": "Datos incompletos",
+    "noRejected": "No hay ejercicios rechazados.",
+    "missing": "faltan:"
+  },
+  "routine": {
+    "startDate": "Semana desde:",
+    "load": "Carga semanal",
+    "bestDay": "Día de mayor gasto calórico:",
+    "pending": "Ejercicios pendientes",
+    "comment": "💬 Comentario del día..."
+  },
+  "search": {
+    "title": "Buscar ejercicios",
+    "muscle": "Grupo muscular",
+    "dayToAdd": "Día para agregar",
+    "results": "Resultados de búsqueda, músculo: {{muscle}}",
+    "valid": "Válidos",
+    "incomplete": "Datos incompletos",
+    "noValid": "Sin resultados válidos para este grupo muscular.",
+    "errorFallback": "Ocurrió un error inesperado al buscar ejercicios.",
+    "errorSuffix": "el catálogo local sigue disponible normalmente",
+    "catalogSummary": "Catálogo local: {{local}} ejercicios | Desde API: {{api}} ejercicios",
+    "missing": "faltan:"
+  },
+  "summary": {
+    "title": "Resumen comparativo",
+    "totalCalories": "Total de calorías:",
+    "longest": "Mayor duración:",
+    "bestDay": "Mejor día:",
+    "registered": "Ejercicios registrados",
+    "average": "Promedio por día:"
+  },
+  "errors": {
+    "missingCardio": "Faltan campos requeridos para Cardio",
+    "missingStrength": "Faltan campos requeridos para Strength",
+    "missingFlexibility": "Faltan campos requeridos para Flexibility",
+    "unsupportedCategory": "Categoría no soportada: {{category}}"
+  },
+  "descriptions": {
+    "pace": "Ritmo:",
+    "series": "series",
+    "reps": "reps",
+    "poses": "posturas"
+  }
+}
