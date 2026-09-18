@@ -1,4 +1,8 @@
 {
+  "language": {
+    "label": "Idioma",
+    "select": "Seleccionar idioma"
+  },
   "nav": {
     "dashboard": "Dashboard",
     "workspace": "Mi espacio",

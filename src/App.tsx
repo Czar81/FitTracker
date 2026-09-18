@@ -9,6 +9,7 @@ import { WeeklyLoadCard } from './components/routine/WeeklyLoadCard';
 import { InstructorView } from './components/routine/InstructorView';
 import { Dashboard, type DashboardSection } from './components/dashboard/Dashboard';
 import Summary from './components/generic/summary';
+import { LanguageSwitcher } from './components/generic/LanguageSwitcher';
 import { useUserStore } from './store/userStore';
 import { flattenRoutine, calculateWeeklyLoad, getRestRecommendation, buildUnifiedReport, buildDashboardSummary } from './utils/calculations';
 import { buildInstructor } from './utils/seedData';
@@ -40,7 +41,10 @@ function App() {
   return (
     <div className="app-wrapper">
       <header className="app-header">
-        <h1>FitTracker</h1>
+        <div className="app-header-top">
+          <h1>FitTracker</h1>
+          <LanguageSwitcher />
+        </div>
         {isProfileSet && (
           <nav className="app-nav">
             <button
