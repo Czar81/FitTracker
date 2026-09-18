@@ -1,0 +1,145 @@
+.closing-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.closing-dashboard-header {
+  text-align: center;
+}
+
+.closing-dashboard-header h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a202c;
+}
+
+.closing-dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  align-items: start;
+}
+
+.closing-dashboard-col {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.closing-dashboard-card {
+  background: white;
+  border-radius: 16px;
+  padding: 20px 24px;
+  border: 1px solid #edf2f7;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.closing-dashboard-card h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #2d3748;
+  margin-bottom: 14px;
+  border-bottom: 2px solid #f7fafc;
+  padding-bottom: 8px;
+}
+
+.closing-dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 12px;
+}
+
+.closing-dashboard-stat {
+  display: flex;
+  flex-direction: column;
+  background: #f8fafc;
+  padding: 12px;
+  border-radius: 10px;
+}
+
+.closing-dashboard-stat-value {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #3182ce;
+}
+
+.closing-dashboard-stat-label {
+  color: #718096;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.closing-dashboard-routine-line {
+  color: #4a5568;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.closing-dashboard-recommendation {
+  font-size: 0.85rem;
+  color: #2d3748;
+  background: #f7fafc;
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+.closing-dashboard-categories {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #4a5568;
+}
+
+.closing-dashboard-activity {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.88rem;
+  color: #4a5568;
+}
+
+.closing-dashboard-activity li {
+  padding: 6px 10px;
+  background: #f7fafc;
+  border-radius: 8px;
+}
+
+.closing-dashboard-nav-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.submit-btn--small {
+  padding: 10px 14px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: 10px;
+  background: #4a90e2;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.submit-btn--small:hover {
+  background: #357abd;
+}
+
+.submit-btn--small:active {
+  background: #2f6da8;
+  transform: translateY(1px);
+}
+
+@media (max-width: 768px) {
+  .closing-dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}

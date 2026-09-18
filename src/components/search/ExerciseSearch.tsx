@@ -99,7 +99,7 @@ export const ExerciseSearch = ({ localCatalogCount }: ExerciseSearchProps): Reac
       </div>
 
       {status === "error" && (
-        <p className="exercise-search-error">⚠️ {errorMessage} — el catálogo local sigue disponible normalmente.</p>
+        <p className="exercise-search-error">{errorMessage} — el catálogo local sigue disponible normalmente.</p>
       )}
 
       {status === "success" && (

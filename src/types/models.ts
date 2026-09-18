@@ -11,6 +11,7 @@ import type {
   ExerciseSource,
   MuscleGroup,
 } from "./enums";
+import type { StoredEntity } from "./store";
 
 interface ExerciseBase {
   id: ExerciseId;
@@ -101,7 +102,7 @@ export interface RestRecommendation {
   message: string;
 }
 
-// Contratos formales de las funciones de cálculo (firma antes que implementación)
+// Formal contracts for calculation functions (signature before implementation)
 export interface FlattenRoutine {
   (routine: WeeklyRoutine): RoutineEntry[];
 }
@@ -145,7 +146,7 @@ export interface CategoryGroup {
   entries: RoutineEntry[];
   totalMinutes: number;
   totalCalories: number;
-  bonusCount: number; // contador de bonus según regla de negocio
+  bonusCount: number; // bonus count according to the business rule
 }
 
 export interface CatalogSummary {
@@ -154,9 +155,9 @@ export interface CatalogSummary {
   flexibility: CategoryGroup;
 }
 
-// --- Sprint 3: identificación de tipo en tiempo de ejecución -----------------
-// Type guards: permiten distinguir la variante concreta de Exercise (unión
-// discriminada) sin usar "as" en ningún punto del código que los consuma.
+// --- Sprint 3: runtime type identification -----------------------------------
+// Type guards distinguish the concrete Exercise variant (discriminated union)
+// without using "as" anywhere in consuming code.
 export interface IsCardioExercise {
   (exercise: Exercise): exercise is CardioExercise;
 }
@@ -175,16 +176,16 @@ export interface CategorizedExercises {
   flexibility: FlexibilityExercise[];
 }
 
-// Dada una colección de ejercicios de cualquier categoría (mezclados, tal como
-// pueden venir de fuentes externas), separa cada uno según su tipo real.
+// Given a collection of exercises from any category (mixed, as they may arrive
+// from external sources), separates each one according to its actual type.
 export interface CategorizeExercises {
   (exercises: Exercise[]): CategorizedExercises;
 }
 
-// --- Sprint 3: integración con la API externa (api-ninjas.com) --------------
-// Forma cruda de un ejercicio tal como lo entrega la API. Todo son strings
-// porque es justamente el formato "no confiable" que hay que validar antes de
-// convertirlo en un Exercise real del dominio.
+// --- Sprint 3: external API integration (api-ninjas.com) ---------------------
+// Raw form of an exercise as delivered by the API. Everything is a string
+// because this is the "untrusted" format that must be validated before being
+// converted into a real domain Exercise.
 export interface ExternalExerciseRaw {
   name: string;
   type: string;
@@ -201,9 +202,9 @@ export interface ExternalExerciseValidation {
   exercise: Exercise | null;
 }
 
-// Valida un ejercicio crudo de la API y, si cumple los campos mínimos
-// requeridos, construye el Exercise tipado correspondiente (Cardio/Strength/
-// Flexibility) determinando la categoría por sus propias reglas, nunca con "as".
+// Validates a raw API exercise and, when it meets the minimum required fields,
+// builds the corresponding typed Exercise (Cardio/Strength/Flexibility),
+// determining the category using its own rules and never with "as".
 export interface ValidateExternalExercise {
   (raw: ExternalExerciseRaw): ExternalExerciseValidation;
 }
@@ -221,4 +222,39 @@ export interface UnifiedReport {
   localExercises: number;
   apiExercises: number;
   incomplete: ExternalExerciseValidation[];
+}
+
+// --- Sprint 4: closing dashboard ---------------------------------------------
+// Weekly summary for a single registered user, as displayed by the dashboard
+// (total load, rest recommendation, and so on).
+export interface UserWeeklySummary {
+  userName: string;
+  experienceLevel: ExperienceLevel;
+  routineName: string;
+  daysTrained: number;
+  totalMinutes: number;
+  totalCalories: number;
+  recommendation: RestRecommendation;
+}
+
+// Global system state, built from data stored in the unified storage layer
+// (users, exercises, and routines).
+export interface DashboardSummary {
+  totalUsers: number;
+  totalExercises: number;
+  localExercises: number;
+  apiExercises: number;
+  activeRoutines: number;
+  categoryCounts: Record<ExerciseCategory, number>;
+  userSummaries: UserWeeklySummary[];
+  recentActivity: string[];
+}
+
+export interface BuildDashboardSummary {
+  (
+    users: StoredEntity<UserProfile>[],
+    exercises: StoredEntity<Exercise>[],
+    routines: StoredEntity<WeeklyRoutine>[],
+    recentActivity: string[]
+  ): DashboardSummary;
 }

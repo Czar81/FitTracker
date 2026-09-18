@@ -20,13 +20,13 @@ export type InstructorId = string;
 
 export type RecommendationLevel = "low" | "ok" | "high";
 
-// Estados posibles de un ejercicio dentro de un entrenamiento (Sprint 3)
+// Possible states for an exercise within a workout (Sprint 3)
 export type WorkoutStatus = "pending" | "completed" | "skipped";
 
-// Origen del ejercicio: creado a mano en el formulario, o traído de la API externa
+// Exercise source: created manually in the form or retrieved from the external API
 export type ExerciseSource = "local" | "api";
 
-// Grupos musculares soportados por la API externa (api-ninjas.com/v1/exercises)
+// Muscle groups supported by the external API (api-ninjas.com/v1/exercises)
 export type MuscleGroup =
   | "abdominals"
   | "abductors"

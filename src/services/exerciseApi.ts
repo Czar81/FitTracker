@@ -3,13 +3,13 @@ import type { MuscleGroup } from "../types/enums";
 
 const API_BASE_URL = "https://api.api-ninjas.com/v1/exercises";
 
-// La clave nunca se escribe en el código: se lee de la variable de entorno
-// VITE_API_NINJAS_KEY (definida en un .env local, no versionado).
+// The key is never written in the source code: it is read from the environment
+// variable VITE_API_NINJAS_KEY (defined in a local, untracked .env file).
 const getApiKey = (): string | undefined => import.meta.env.VITE_API_NINJAS_KEY;
 
 export class ExerciseApiError extends Error {}
 
-// Type guard mínimo para no confiar ciegamente en el JSON que llega de la red.
+// Minimal type guard so the JSON received from the network is not trusted blindly.
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === "object" && value !== null;
 
@@ -24,7 +24,7 @@ const isExternalExerciseRawShape = (value: unknown): value is ExternalExerciseRa
     isNonEmptyString(candidate.type) &&
     isNonEmptyString(candidate.muscle) &&
     isNonEmptyString(candidate.difficulty) &&
-    isNonEmptyString(candidate.instructions) && // 🎯 Fix: rechaza instrucciones vacías ("") o con espacios
+    isNonEmptyString(candidate.instructions) && // 🎯 Fix: rejects empty instructions ("") or whitespace-only values
     (typeof candidate.equipment === "string" || Array.isArray(candidate.equipments))
   );
 };

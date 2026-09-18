@@ -1,4 +1,4 @@
-import type { DayOfWeek, ExerciseId } from "../types/enums";
+import type { DayOfWeek, ExerciseId, ExerciseCategory } from "../types/enums";
 import type {
   RoutineEntry,
   ExercisePercentage,
@@ -29,6 +29,7 @@ import type {
   ExternalExerciseValidation,
   ValidateExternalExercise,
   UnifiedReport,
+  BuildDashboardSummary,
 } from "../types/models";
 
 export const calcCalories = (durationMinutes: number, caloriesPerMinute: number): number =>
@@ -292,9 +293,9 @@ export const setSessionComment: SetSessionComment = (
   ),
 });
 
-// --- Sprint 3: identificación de tipo en tiempo de ejecución -----------------
-// Type guards sobre el discriminante "type": el compilador impide llamar a un
-// campo específico de una variante si primero no se pasó por uno de estos.
+// --- Sprint 3: runtime type identification -----------------------------------
+// Type guards for the "type" discriminant: the compiler prevents access to a
+// variant-specific field unless the value first passes through one of these.
 export const isCardioExercise: IsCardioExercise = (exercise: Exercise): exercise is CardioExercise =>
   exercise.type === "Cardio";
 
@@ -323,9 +324,9 @@ export const categorizeExercises: CategorizeExercises = (exercises: Exercise[]):
   return result;
 };
 
-// --- Sprint 3: integración con la API externa (api-ninjas.com) --------------
-// La API devuelve "type" en minúscula y con varias etiquetas posibles; acá se
-// traduce a nuestra ExerciseCategory sin adivinar: si no se reconoce, null.
+// --- Sprint 3: external API integration (api-ninjas.com) ---------------------
+// The API returns "type" in lowercase with several possible labels; this maps
+// it to our ExerciseCategory without guessing: unrecognized values return null.
 const mapApiTypeToCategory = (apiType: string): "Cardio" | "Strength" | "Flexibility" | null => {
   const normalized = apiType.trim().toLowerCase();
   switch (normalized) {
@@ -352,8 +353,8 @@ const REQUIRED_EXTERNAL_FIELDS: (keyof ExternalExerciseRaw)[] = [
   "instructions",
 ];
 
-// Valores por defecto para completar el Exercise del dominio, ya que la API
-// externa no reporta duración, calorías ni métricas de desempeño.
+// Default values used to complete the domain Exercise because the external API
+// does not report duration, calories, or performance metrics.
 const buildExerciseFromExternal = (raw: ExternalExerciseRaw, category: "Cardio" | "Strength" | "Flexibility"): Exercise => {
   const id = crypto.randomUUID();
 
@@ -425,4 +426,47 @@ export const validateExternalExercise: ValidateExternalExercise = (raw: External
   }
 
   return { raw, valid: true, missingFields: [], exercise: buildExerciseFromExternal(raw, category) };
+};
+
+// --- Sprint 4: closing dashboard ---------------------------------------------
+// Reads directly from the unified store (users, exercises, and routines) and
+// builds the global state displayed by the dashboard.
+export const buildDashboardSummary: BuildDashboardSummary = (users, exercises, routines, recentActivity) => {
+  const localExercises = exercises.filter((entry) => entry.data.source === "local").length;
+  const apiExercises = exercises.filter((entry) => entry.data.source === "api").length;
+
+  const activeRoutines = routines.filter((entry) =>
+    entry.data.sessions.some((session: DaySession): boolean => session.exercises.length > 0)
+  ).length;
+
+  const categorized = categorizeExercises(exercises.map((entry) => entry.data));
+  const categoryCounts: Record<ExerciseCategory, number> = {
+    Cardio: categorized.cardio.length,
+    Strength: categorized.strength.length,
+    Flexibility: categorized.flexibility.length,
+  };
+
+  const userSummaries = users.map((entry) => {
+    const load = calculateWeeklyLoad(entry.data.assignedRoutine);
+    return {
+      userName: entry.data.name,
+      experienceLevel: entry.data.experienceLevel,
+      routineName: entry.data.assignedRoutine.name,
+      daysTrained: load.daysTrained,
+      totalMinutes: load.totalMinutes,
+      totalCalories: load.totalCalories,
+      recommendation: getRestRecommendation(load),
+    };
+  });
+
+  return {
+    totalUsers: users.length,
+    totalExercises: exercises.length,
+    localExercises,
+    apiExercises,
+    activeRoutines,
+    categoryCounts,
+    userSummaries,
+    recentActivity,
+  };
 };
